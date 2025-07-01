@@ -1,0 +1,51 @@
+# Dependency directories
+/node_modules
+
+# Build files
+/build
+/dist
+
+# Log files
+/logs
+
+# Database Tests
+seed.js
+
+# IDE and editor files
+/.vscode
+/.idea
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# npm debugging logs
+npm-debug.log*
+
+# Ignore node_modules directory for both api and client
+**/node_modules
+
+# Ignore environment variables files for both api and client
+client/.env
+.env
+
+# Ignore any build output or generated files
+client/build
+client/dist
+
+# Ignore any logs or runtime data
+client/logs
+
+# Ignore IDE and editor specific files
+client/.vscode
+client/.idea
+
+# Ignore any local development files
+client/.env.local
+
+# Ignore any user-specific files
+client/.env.local
+
+# Ignore any dependencies installed using yarn
+yarn.lock
