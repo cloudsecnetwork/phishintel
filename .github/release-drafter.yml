@@ -17,10 +17,11 @@ categories:
 
 change-template: '- $TITLE (#$NUMBER)'
 
-version-resolver:
-  major:
-    labels: ['breaking']
-  minor:
-    labels: ['enhancement']
-  patch:
-    labels: ['bug']
+template: |
+  ## What’s Changed
+
+  $CHANGES
+
+  ## Contributors
+
+  Thanks to our contributors: $CONTRIBUTORS
