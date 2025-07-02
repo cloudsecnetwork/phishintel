@@ -54,6 +54,9 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client/build', 'index.html')); // Fallback to React's index.html
 });
 
+const port = process.env.PORT || 5000;
+const db = process.env.DB_URL;
+
 mongoose.connect(db)
     .then(() => {
         console.log('Connected to MongoDB');
@@ -67,3 +70,5 @@ mongoose.connect(db)
         console.error('MongoDB connection error:', err.message);
         process.exit(1); // Exit on MongoDB connection error
     });
+
+export default app;
