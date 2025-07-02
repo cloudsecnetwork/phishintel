@@ -1,0 +1,41 @@
+/* Background animation */
+.animated-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 60%);
+    animation: rotate-background 15s linear infinite;
+    z-index: 0;
+    transform-origin: center;
+}
+
+/* Floating animation for the image */
+@keyframes rotate-background {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
