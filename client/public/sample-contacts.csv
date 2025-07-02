@@ -1,0 +1,5 @@
+firstName,lastName,email,phoneNumber,role,department,company,country
+Chinedu,Okeke,chinedu.okeke@example.com,08012345678,Manager,Sales,NigeriaCorp,Nigeria
+Aisha,Bello,aisha.bello@example.com,08023456789,Engineer,Development,TechSolutions,Nigeria
+Tunde,Adedayo,tunde.adedayo@example.com,08034567890,Analyst,Finance,FinCorp,Nigeria
+Ngozi,Nwankwo,ngozi.nwankwo@example.com,08045678901,Designer,Creative,DesignPlus,Nigeria

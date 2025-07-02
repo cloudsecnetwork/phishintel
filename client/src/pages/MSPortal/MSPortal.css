@@ -1,0 +1,228 @@
+/* client\src\pages\MSPortal\MSPortal.css */
+
+/* General Layout */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', sans-serif;
+    background: url('../../assets/img/bg.svg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ms-portal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 460px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Form Container */
+.form-container {
+    background-color: #ffffff;
+    padding: 40px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+    border: none;
+    text-align: left;
+    width: 100%;
+    max-width: 460px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+.ms-logo {
+    height: 25px;
+    width: auto;
+}
+
+/* Form Title and Subtitle */
+.form-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.form-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Input Styling */
+.ms-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    padding-left: 0px;
+    padding-right: 0px;
+    font-size: 15px;
+    border: none;
+    font-weight: 100;
+    border-bottom: 1px solid #333;
+    color: #333;
+    outline: none;
+}
+
+/* Button Container */
+.button-container {
+    margin-top: 24px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-next {
+    background-color: #0078d4;
+    color: #fff;
+    padding: 0px 40px;
+    height: 32px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-next:hover {
+    background-color: #005ea6;
+}
+
+.btn-back {
+    background-color: #e1e1e1;
+    color: #333;
+    padding: 0px 40px;
+    height: 32px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+    background-color: #f3f3f3;
+}
+
+/* Link Styling */
+.link-container {
+    margin-bottom: 13px;
+    font-size: 13px;
+}
+
+.link {
+    color: #0078d4;
+    text-decoration: none;
+    margin-bottom: 13px;
+    font-size: 13px;
+}
+
+.link:hover {
+    text-decoration: underline;
+    color: #777;
+}
+
+/* Options Container */
+.options-container {
+    display: flex;
+    flex-direction: row;
+    background-color: #ffffff;
+    padding: 10px;
+    padding-left: 32px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+    border: none;
+    width: 100%;
+    max-width: 460px;
+    box-sizing: border-box;
+}
+
+/* Key Icon */
+.key-icon {
+    width: 32px;
+    margin-right: 10px;
+}
+
+.options-text {
+    color: #333;
+    text-decoration: none;
+    margin-top: 4px;
+    font-size: 15px;
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f9f9f9;
+    font-family: 'Arial', sans-serif;
+}
+
+.spinner-container {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
+}
+
+.spinner {
+    width: 100%;
+    height: 100%;
+    border: 5px solid transparent;
+    border-top: 5px solid #0078d7;
+    /* Blue spinner */
+    border-radius: 50%;
+    animation: spin 1.2s linear infinite;
+}
+
+.spinner-shadow {
+    position: absolute;
+    width: 80%;
+    height: 10px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    bottom: -10px;
+    left: 10%;
+    animation: shadow 1.2s linear infinite;
+}
+
+.loading-text {
+    font-size: 1.5em;
+    color: #333;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Spinner animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Shadow animation */
+@keyframes shadow {
+    0% {
+        transform: scaleX(1);
+    }
+
+    50% {
+        transform: scaleX(1.5);
+    }
+
+    100% {
+        transform: scaleX(1);
+    }
+}
