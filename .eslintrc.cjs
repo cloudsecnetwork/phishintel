@@ -1,13 +1,11 @@
-export default {
+module.exports = {
   env: {
     browser: true,
     es2021: true,
     node: true,
     jest: true,
   },
-  extends: [
-    'airbnb-base',
-  ],
+  extends: ['airbnb-base'],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
@@ -18,7 +16,7 @@ export default {
     'import/extensions': ['error', 'ignorePackages'],
     'import/no-unresolved': 'off',
     'no-underscore-dangle': 'off',
-    'camelcase': 'off',
+    camelcase: 'off',
   },
   ignorePatterns: [
     'node_modules/',
@@ -27,4 +25,4 @@ export default {
     'coverage/',
     '*.config.js',
   ],
-}; 
+};
