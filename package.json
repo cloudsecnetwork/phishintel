@@ -13,8 +13,8 @@
     "start": "nodemon --exec babel-node app.js",
     "start:prod": "node dist/app.js",
     "build": "babel --out-dir dist",
-    "lint": "eslint . --ext .js --config .eslintrc.cjs --ignore-pattern 'client/' --ignore-pattern 'node_modules/' --ignore-pattern 'coverage/'",
-    "lint:fix": "eslint . --ext .js --config .eslintrc.cjs --fix --ignore-pattern 'client/' --ignore-pattern 'node_modules/' --ignore-pattern 'coverage/'"
+    "lint": "eslint . --ext .js --ignore-pattern 'client/' --ignore-pattern 'node_modules/' --ignore-pattern 'coverage/'",
+    "lint:fix": "eslint . --ext .js --fix --ignore-pattern 'client/' --ignore-pattern 'node_modules/' --ignore-pattern 'coverage/'"
   },
   "repository": {
     "type": "git",
