@@ -2,9 +2,9 @@ name: Startup & Build Check
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test-backend:
@@ -22,76 +22,95 @@ jobs:
           --health-retries 5
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.x'
-        cache: 'npm'
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
 
-    - name: Install backend dependencies
-      run: npm ci
+      - name: Install backend dependencies
+        run: npm ci
 
-    - name: Start backend in background
-      run: |
-        PORT=8080 \
-        DB_URL=mongodb://localhost:27017/test \
-        ADMIN_PASSWORD=test-admin-password \
-        SESSION_SECRET=test-session-secret \
-        node app.js &
-        sleep 5
+      - name: Start backend in background
+        run: |
+          PORT=8080 \
+          DB_URL=mongodb://localhost:27017/test \
+          ADMIN_PASSWORD=test-admin-password \
+          SESSION_SECRET=test-session-secret \
+          node app.js &
+          sleep 5
 
-    - name: Check backend /health route
-      run: |
-        for i in {1..10}; do
-          if curl --fail http://localhost:8080/health; then
-            echo "Backend is healthy"
-            exit 0
-          fi
-          echo "Waiting for backend..."
-          sleep 2
-        done
-        echo "Backend did not become healthy in time"
-        exit 1
+      - name: Check backend /health route
+        run: |
+          for i in {1..10}; do
+            if curl --fail http://localhost:8080/health; then
+              echo "Backend is healthy"
+              exit 0
+            fi
+            echo "Waiting for backend..."
+            sleep 2
+          done
+          echo "Backend did not become healthy in time"
+          exit 1
 
   test-frontend:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.x'
-        cache: 'npm'
-        cache-dependency-path: client/package-lock.json
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+          cache-dependency-path: client/package-lock.json
 
-    - name: Install frontend dependencies
-      working-directory: ./client
-      run: npm ci
+      - name: Install frontend dependencies
+        working-directory: ./client
+        run: npm ci
 
-    - name: Build frontend
-      working-directory: ./client
-      run: npm run build
+      - name: Build frontend
+        working-directory: ./client
+        run: npm run build
 
-    - name: Install static server
-      run: npm install -g serve
+      - name: Install static server
+        run: npm install -g serve
 
-    - name: Serve built frontend
-      working-directory: ./client
-      run: serve -s build -l 3000 &
-    
-    - name: Check frontend root page
-      run: |
-        for i in {1..10}; do
-          if curl --fail http://localhost:3000; then
-            echo "Frontend is healthy"
-            exit 0
-          fi
-          echo "Waiting for frontend..."
-          sleep 2
-        done
-        echo "Frontend did not become healthy in time"
-        exit 1
+      - name: Serve built frontend
+        working-directory: ./client
+        run: serve -s build -l 3000 &
+
+      - name: Check frontend root page
+        run: |
+          for i in {1..10}; do
+            if curl --fail http://localhost:3000; then
+              echo "Frontend is healthy"
+              exit 0
+            fi
+            echo "Waiting for frontend..."
+            sleep 2
+          done
+          echo "Frontend did not become healthy in time"
+          exit 1
+
+  security-check:
+    runs-on: ubuntu-latest
+    needs: [test-backend, test-frontend]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+
+      - name: Install backend dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
