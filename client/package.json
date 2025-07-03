@@ -20,7 +20,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -28,7 +28,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll=false --coverage --passWithNoTests",
     "test:watch": "react-scripts test",
-    "test:ci": "react-scripts test --watchAll=false --coverage --passWithNoTests --ci",
+    "test:ci": "react-scripts test --watchAll=false --passWithNoTests",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
