@@ -13,7 +13,7 @@
     "start": "nodemon --exec babel-node app.js",
     "start:prod": "node dist/app.js",
     "build": "babel --out-dir dist",
-    "lint": "eslint . --ext .js",
+    "lint": "eslint api --ext .js",
     "lint:fix": "eslint . --ext .js --fix"
   },
   "repository": {
