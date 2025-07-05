@@ -26,18 +26,20 @@ const CreateAudience = () => {
         // Reset validation errors
         setValidationError({ name: false, file: false });
 
-        // Validate input fields
-        if (!audienceName || !file) {
+        // Validate input fields - only audience name is required
+        if (!audienceName) {
             setValidationError({
                 name: !audienceName,
-                file: !file,
+                file: false,
             });
             return;
         }
 
         const formData = new FormData();
         formData.append('name', audienceName);
-        formData.append('file', file);
+        if (file) {
+            formData.append('file', file);
+        }
 
         // Call the createAudience function from the hook
         const response = await createAudience(formData);
@@ -67,7 +69,7 @@ const CreateAudience = () => {
                                 Create a New Audience
                             </Typography>
                             <Typography sx={{ fontSize: 13 }} color="text.secondary">
-                                Define your audience and upload a CSV file with their contact information.
+                                Define your audience and optionally upload a CSV file with their contact information.
                             </Typography>
                         </Grid>
                     </Grid>
@@ -98,8 +100,9 @@ const CreateAudience = () => {
                             {/* Instructions */}
                             <Grid item xs={12}>
                                 <Typography variant="body1" sx={{ mb: 1 }}>
-                                    Please upload a CSV file with the required fields: <strong>First Name</strong> and <strong>Email</strong>.
+                                    Optionally upload a CSV file with the required fields: <strong>First Name</strong> and <strong>Email</strong>.
                                     If no first name is available, use generic values like <strong>"user"</strong> or <strong>"employee"</strong>.
+                                    You can also create an empty audience and add contacts manually later.
                                 </Typography>
                                 <Typography variant="body1" sx={{ mb: 2 }}>
                                     <Link href="/sample-contacts.csv" sx={{ color: '#00bfff' }}>Download a sample CSV file</Link> to see the expected format.
@@ -113,16 +116,7 @@ const CreateAudience = () => {
                                     type="file"
                                     onChange={handleFileChange}
                                     inputProps={{ accept: '.csv' }}
-                                    error={validationError.file} // Set error state if file is missing
-                                    helperText={validationError.file ? "CSV file is required" : "Upload a CSV file with your audience's contacts."}
-                                    required
-                                    sx={{
-                                        '& .MuiInputLabel-root': {
-                                            '& .MuiInputLabel-asterisk': {
-                                                color: 'error.main',
-                                            },
-                                        },
-                                    }}
+                                    helperText="Upload a CSV file with your audience's contacts (optional)."
                                 />
                             </Grid>
 
@@ -143,7 +137,7 @@ const CreateAudience = () => {
                 <DialogTitle>Success</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        An audience containing your uploaded contacts has been successfully created!
+                        Your audience has been successfully created!
                         You can now view the details of the audience by navigating to the audience details page.
                     </DialogContentText>
                 </DialogContent>

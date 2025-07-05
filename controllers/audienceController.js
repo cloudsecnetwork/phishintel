@@ -95,10 +95,8 @@ export const createAudience = async (req, res) => {
                 });
             }
         } else {
-            return res.status(400).json({
-                success: false,
-                message: 'No file was uploaded. Please upload a valid CSV file.'
-            });
+            // Allow creating audience without CSV file - contacts will be empty
+            contactIds = [];
         }
 
         // Create the new audience with the contacts

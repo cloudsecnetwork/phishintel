@@ -13,8 +13,7 @@ const audienceSchema = new Schema({
     },
     contacts: [{
         type: Schema.Types.ObjectId,
-        ref: 'Contact',
-        required: true
+        ref: 'Contact'
     }],
 }, { timestamps: true });
 
