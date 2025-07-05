@@ -66,6 +66,13 @@ const CreateSenderProfile = () => {
                                     onChange={(e) => setSenderName(e.target.value)}
                                     required
                                     helperText="Enter the name of the sender."
+                                    sx={{
+                                        '& .MuiInputLabel-root': {
+                                            '& .MuiInputLabel-asterisk': {
+                                                color: 'error.main',
+                                            },
+                                        },
+                                    }}
                                 />
                             </Grid>
 
@@ -80,6 +87,13 @@ const CreateSenderProfile = () => {
                                     onChange={(e) => setHost(e.target.value)}
                                     required
                                     helperText="Enter the SMTP host (e.g., smtp.example.com)."
+                                    sx={{
+                                        '& .MuiInputLabel-root': {
+                                            '& .MuiInputLabel-asterisk': {
+                                                color: 'error.main',
+                                            },
+                                        },
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -92,6 +106,13 @@ const CreateSenderProfile = () => {
                                     required
                                     type="number"
                                     helperText="Enter the port number (e.g., 465 for SSL, 587 for TLS)."
+                                    sx={{
+                                        '& .MuiInputLabel-root': {
+                                            '& .MuiInputLabel-asterisk': {
+                                                color: 'error.main',
+                                            },
+                                        },
+                                    }}
                                 />
                             </Grid>
 
@@ -99,7 +120,7 @@ const CreateSenderProfile = () => {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
-                                    label="Email or Username"
+                                    label="Email or Username (optional)"
                                     variant="outlined"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
@@ -110,7 +131,7 @@ const CreateSenderProfile = () => {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
-                                    label="Password"
+                                    label="Password (optional)"
                                     variant="outlined"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}

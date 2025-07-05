@@ -174,6 +174,13 @@ const StartCampaign = () => {
                                             onChange={(e) => setCampaignName(e.target.value)}
                                             required
                                             helperText="Provide a name for your campaign. This will help you identify it later."
+                                            sx={{
+                                                '& .MuiInputLabel-root': {
+                                                    '& .MuiInputLabel-asterisk': {
+                                                        color: 'error.main',
+                                                    },
+                                                },
+                                            }}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -185,6 +192,13 @@ const StartCampaign = () => {
                                             onChange={(e) => setSelectedAudience(e.target.value)}
                                             required
                                             helperText="Choose the audience you want to target with this campaign."
+                                            sx={{
+                                                '& .MuiInputLabel-root': {
+                                                    '& .MuiInputLabel-asterisk': {
+                                                        color: 'error.main',
+                                                    },
+                                                },
+                                            }}
                                         >
                                             {audiences.map((audience) => (
                                                 <MenuItem key={audience._id} value={audience._id}>
@@ -203,6 +217,13 @@ const StartCampaign = () => {
                                             onChange={(e) => setSelectedSenderProfile(e.target.value)}
                                             required
                                             helperText="Select the profile that will appear as the sender of the campaign emails."
+                                            sx={{
+                                                '& .MuiInputLabel-root': {
+                                                    '& .MuiInputLabel-asterisk': {
+                                                        color: 'error.main',
+                                                    },
+                                                },
+                                            }}
                                         >
                                             {senderProfiles.map((profile) => (
                                                 <MenuItem key={profile._id} value={profile._id}>
@@ -220,6 +241,13 @@ const StartCampaign = () => {
                                             onChange={(e) => setSelectedTemplate(e.target.value)}
                                             required
                                             helperText="Select a pre-designed email template for this campaign."
+                                            sx={{
+                                                '& .MuiInputLabel-root': {
+                                                    '& .MuiInputLabel-asterisk': {
+                                                        color: 'error.main',
+                                                    },
+                                                },
+                                            }}
                                         >
                                             <MenuItem value="ai-generated">AI Generated Content</MenuItem>
                                             {templates.map((template) => (
@@ -239,6 +267,13 @@ const StartCampaign = () => {
                                             onChange={(e) => setEmailConcurrency(e.target.value)}
                                             required
                                             helperText="Select the number of emails to send concurrently."
+                                            sx={{
+                                                '& .MuiInputLabel-root': {
+                                                    '& .MuiInputLabel-asterisk': {
+                                                        color: 'error.main',
+                                                    },
+                                                },
+                                            }}
                                         >
                                             {[1, 2, 5].map((value) => (
                                                 <MenuItem key={value} value={value}>
@@ -256,6 +291,13 @@ const StartCampaign = () => {
                                             onChange={(e) => setTimeDelay(e.target.value)}
                                             required
                                             helperText="Specify the time delay between email batches in seconds."
+                                            sx={{
+                                                '& .MuiInputLabel-root': {
+                                                    '& .MuiInputLabel-asterisk': {
+                                                        color: 'error.main',
+                                                    },
+                                                },
+                                            }}
                                         >
                                             {[0, 5, 10, 30].map((value) => (
                                                 <MenuItem key={value} value={value}>

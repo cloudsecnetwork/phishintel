@@ -362,14 +362,14 @@ const AudienceDetail = () => {
                     <form>
                         <Grid container spacing={2} sx={{ mt: 2 }}>
                             {[
-                                { name: 'firstName', label: 'First Name' },
-                                { name: 'lastName', label: 'Last Name' },
-                                { name: 'email', label: 'Email' },
-                                { name: 'phoneNumber', label: 'Phone Number' },
-                                { name: 'role', label: 'Role' },
-                                { name: 'department', label: 'Department' },
-                                { name: 'company', label: 'Company' },
-                                { name: 'country', label: 'Country' }
+                                { name: 'firstName', label: 'First Name', required: true },
+                                { name: 'lastName', label: 'Last Name (optional)', required: false },
+                                { name: 'email', label: 'Email', required: true },
+                                { name: 'phoneNumber', label: 'Phone Number (optional)', required: false },
+                                { name: 'role', label: 'Role (optional)', required: false },
+                                { name: 'department', label: 'Department (optional)', required: false },
+                                { name: 'company', label: 'Company (optional)', required: false },
+                                { name: 'country', label: 'Country (optional)', required: false }
                             ].map((field, index) => (
                                 <Grid item xs={12} md={6} key={field.name}>
                                     <TextField
@@ -382,6 +382,7 @@ const AudienceDetail = () => {
                                         variant="outlined"
                                         value={newContact[field.name]}
                                         onChange={handleAddContactChange}
+                                        required={field.required}
                                     />
                                 </Grid>
                             ))}

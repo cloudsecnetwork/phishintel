@@ -85,6 +85,13 @@ const CreateAudience = () => {
                                     required
                                     error={validationError.name} // Set error state if name is missing
                                     helperText={validationError.name ? "Audience name is required" : "Enter a name for your audience."}
+                                    sx={{
+                                        '& .MuiInputLabel-root': {
+                                            '& .MuiInputLabel-asterisk': {
+                                                color: 'error.main',
+                                            },
+                                        },
+                                    }}
                                 />
                             </Grid>
 
@@ -109,6 +116,13 @@ const CreateAudience = () => {
                                     error={validationError.file} // Set error state if file is missing
                                     helperText={validationError.file ? "CSV file is required" : "Upload a CSV file with your audience's contacts."}
                                     required
+                                    sx={{
+                                        '& .MuiInputLabel-root': {
+                                            '& .MuiInputLabel-asterisk': {
+                                                color: 'error.main',
+                                            },
+                                        },
+                                    }}
                                 />
                             </Grid>
 
