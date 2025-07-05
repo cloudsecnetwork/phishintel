@@ -130,6 +130,7 @@ export const useAudience = () => {
                 setAudienceDetail((prevDetail) => ({
                     ...prevDetail,
                     contacts: prevDetail.contacts.filter(contact => contact._id !== contactId),
+                    contactCount: (prevDetail.contactCount || 0) - 1, // Decrement the contact count
                 }));
                 return { success: true, message: 'Contact deleted successfully' };
             } else {
