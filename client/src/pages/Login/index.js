@@ -53,6 +53,13 @@ export default function SignIn() {
                             name="username"
                             autoComplete="username"
                             autoFocus
+                            sx={{
+                                '& .MuiInputLabel-root': {
+                                    '& .MuiInputLabel-asterisk': {
+                                        color: 'error.main',
+                                    },
+                                },
+                            }}
                         />
                         <TextField
                             margin="normal"
@@ -63,6 +70,13 @@ export default function SignIn() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            sx={{
+                                '& .MuiInputLabel-root': {
+                                    '& .MuiInputLabel-asterisk': {
+                                        color: 'error.main',
+                                    },
+                                },
+                            }}
                         />
                         <Button
                             type="submit"

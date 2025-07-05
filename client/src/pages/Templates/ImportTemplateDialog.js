@@ -73,6 +73,13 @@ const ImportTemplateDialog = ({ open, onClose, onImport }) => {
                             helperText={error && !templateName ? "Template name is required." : "Enter a name for your template."}
                             error={error && !templateName}
                             required
+                            sx={{
+                                '& .MuiInputLabel-root': {
+                                    '& .MuiInputLabel-asterisk': {
+                                        color: 'error.main',
+                                    },
+                                },
+                            }}
                         />
                     </Grid>
                     {/* Checkbox for Same as Template Name */}
@@ -104,6 +111,13 @@ const ImportTemplateDialog = ({ open, onClose, onImport }) => {
                                 helperText={error && !emailSubject ? "Email subject is required." : "Enter a subject for your email."}
                                 error={error && !emailSubject}
                                 required
+                                sx={{
+                                    '& .MuiInputLabel-root': {
+                                        '& .MuiInputLabel-asterisk': {
+                                            color: 'error.main',
+                                        },
+                                    },
+                                }}
                             />
                         </Grid>
                     )}
@@ -137,6 +151,13 @@ const ImportTemplateDialog = ({ open, onClose, onImport }) => {
                             helperText={error ? "Upload a valid HTML file (max 2MB)." : "Upload an HTML file for your template."}
                             error={error && !htmlFile}
                             required
+                            sx={{
+                                '& .MuiInputLabel-root': {
+                                    '& .MuiInputLabel-asterisk': {
+                                        color: 'error.main',
+                                    },
+                                },
+                            }}
                         />
                     </Grid>
                 </Grid>
