@@ -17,7 +17,8 @@ import {
     DialogContent,
     Chip,
     Alert,
-    DialogContentText
+    DialogContentText,
+    Snackbar
 } from '@mui/material';
 import { Group, Person, Add } from '@mui/icons-material';
 import Sidebar from '../../components/Sidebar';
@@ -47,6 +48,10 @@ const AudienceDetail = () => {
         company: '',
         country: ''
     });
+
+    // Error handling state
+    const [errorSnackbar, setErrorSnackbar] = useState({ open: false, message: '' });
+    const [formErrors, setFormErrors] = useState({});
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
     const isMenuOpen = Boolean(menuAnchorEl);
@@ -86,11 +91,46 @@ const AudienceDetail = () => {
         }
     }, [id, hasFetched, fetchAudienceDetail]);
 
+    // Email validation function
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    // Form validation function
+    const validateForm = () => {
+        const errors = {};
+        
+        if (!newContact.firstName.trim()) {
+            errors.firstName = 'First name is required';
+        }
+        
+        if (!newContact.email.trim()) {
+            errors.email = 'Email is required';
+        } else if (!validateEmail(newContact.email)) {
+            errors.email = 'Please enter a valid email address';
+        }
+        
+        setFormErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
     const handleAddContactChange = (e) => {
-        setNewContact({ ...newContact, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setNewContact({ ...newContact, [name]: value });
+        
+        // Clear error when user starts typing
+        if (formErrors[name]) {
+            setFormErrors({ ...formErrors, [name]: '' });
+        }
     };
 
     const handleAddContact = async () => {
+        // Frontend validation
+        if (!validateForm()) {
+            return;
+        }
+
         const response = await addContact(id, newContact);
         if (response.success) {
             setContacts((prevContacts) => [...prevContacts, response.data]); // Update local contacts
@@ -105,10 +145,18 @@ const AudienceDetail = () => {
                 company: '',
                 country: ''
             });
+            setFormErrors({}); // Clear form errors
         } else {
-            console.error('Failed to add contact:', response.message);
-            alert(`Error: ${response.message}`);
+            // Show error in snackbar
+            setErrorSnackbar({ 
+                open: true, 
+                message: response.message || 'Failed to add contact' 
+            });
         }
+    };
+
+    const handleCloseErrorSnackbar = () => {
+        setErrorSnackbar({ open: false, message: '' });
     };
 
     const handleDeleteAudience = async () => {
@@ -377,12 +425,21 @@ const AudienceDetail = () => {
                                         margin="dense"
                                         name={field.name}
                                         label={field.label}
-                                        type="text"
+                                        type={field.name === 'email' ? 'email' : 'text'}
                                         fullWidth
                                         variant="outlined"
                                         value={newContact[field.name]}
                                         onChange={handleAddContactChange}
                                         required={field.required}
+                                        error={!!formErrors[field.name]}
+                                        helperText={formErrors[field.name] || ''}
+                                        sx={{
+                                            '& .MuiInputLabel-root': {
+                                                '& .MuiInputLabel-asterisk': {
+                                                    color: 'error.main',
+                                                },
+                                            },
+                                        }}
                                     />
                                 </Grid>
                             ))}
@@ -448,6 +505,22 @@ const AudienceDetail = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            {/* Error Snackbar */}
+            <Snackbar
+                open={errorSnackbar.open}
+                autoHideDuration={6000}
+                onClose={handleCloseErrorSnackbar}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert 
+                    onClose={handleCloseErrorSnackbar} 
+                    severity="error" 
+                    sx={{ width: '100%' }}
+                >
+                    {errorSnackbar.message}
+                </Alert>
+            </Snackbar>
 
         </Box>
     );
