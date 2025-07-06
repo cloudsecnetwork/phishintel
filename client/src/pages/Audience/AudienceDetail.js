@@ -26,7 +26,7 @@ import ContactDetailsDialog from '../../components/ContactDetailsDialog';
 import AddContactDialog from '../../components/AddContactDialog';
 import CSVUploadDialog from '../../components/CSVUploadDialog';
 import DeleteAudienceDialog from '../../components/DeleteAudienceDialog';
-import ContactsDataGrid from '../../components/ContactsDataGrid';
+import ResponsiveContactsTable from '../../components/ResponsiveContactsTable';
 
 const AudienceDetail = () => {
     const { id } = useParams();
@@ -239,14 +239,14 @@ const AudienceDetail = () => {
                                     backgroundClip: 'text',
                                     WebkitBackgroundClip: 'text',
                                     WebkitTextFillColor: 'transparent',
-                                    fontSize: { xs: '1.2rem', md: '1.8rem' }
+                                    fontSize: { xs: '1.2rem', md: '1.5rem' }
                                 }} 
                                 variant="h4" 
                                 color="primary"
                             >
                                 Audience Details
                             </Typography>
-                            <Typography sx={{ fontSize: 13 }} color="text.secondary">
+                            <Typography sx={{ fontSize: '0.8rem' }} color="text.secondary">
                                 View details of your selected audience and associated contacts.
                             </Typography>
                         </Grid>
@@ -348,7 +348,7 @@ const AudienceDetail = () => {
                                             <Typography
                                                 variant="h6"
                                                 sx={{
-                                                    fontWeight: 600,
+                                                    fontWeight: 500,
                                                     whiteSpace: 'nowrap',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -364,7 +364,7 @@ const AudienceDetail = () => {
                                                         fontWeight: 400,
                                                         fontSize: '0.875rem'
                                                     }}>
-                                                        {/* Loading audience... */}
+                                                        ...
                                                     </Box>
                                                 ) : audienceDetail?.name || 'N/A'}
                                             </Typography>
@@ -405,7 +405,7 @@ const AudienceDetail = () => {
                                             <Typography 
                                                 variant="h6" 
                                                 sx={{ 
-                                                    fontWeight: 700,
+                                                    fontWeight: 500,
                                                     color: 'primary.main',
                                                     fontSize: '1.5rem'
                                                 }}
@@ -416,7 +416,7 @@ const AudienceDetail = () => {
                                                         fontWeight: 400,
                                                         fontSize: '0.875rem'
                                                     }}>
-                                                        {/* Loading... */}
+                                                        ...
                                                     </Box>
                                                 ) : audienceDetail?.contactCount || 0}
                                             </Typography>
@@ -430,57 +430,66 @@ const AudienceDetail = () => {
 
                     <Divider sx={{ my: 3 }} />
 
-                    <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-                        <Grid item>
-                            <Typography 
-                                color='primary' 
-                                variant="h6"
-                                sx={{ 
-                                    fontWeight: 600,
-                                    fontSize: '1.25rem',
-                                    mb: 0.5
-                                }}
-                            >
-                                Contact List
-                            </Typography>
-                            <Typography 
-                                sx={{ 
-                                    fontSize: '0.875rem',
-                                    color: 'text.secondary',
-                                    lineHeight: 1.4
-                                }} 
-                                color="text.secondary"
-                            >
-                                View and manage contacts associated with this audience.
-                            </Typography>
+                    <Box sx={{ mb: 3 }}>
+                        <Grid container spacing={2} alignItems="flex-start">
+                            <Grid item xs={12} md={8}>
+                                <Typography 
+                                    color='primary' 
+                                    variant="h6"
+                                    sx={{ 
+                                        fontWeight: 500,
+                                        fontSize: { xs: '1rem', md: '1.5rem' },
+                                        mb: 0.5
+                                    }}
+                                >
+                                    Contact List
+                                </Typography>
+                                <Typography 
+                                    sx={{ 
+                                        fontSize: '0.8rem',
+                                        color: 'text.secondary',
+                                        lineHeight: 1.4
+                                    }} 
+                                    color="text.secondary"
+                                >
+                                    Manage contacts associated with this audience.
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} md={4} sx={{ 
+                                display: 'flex', 
+                                justifyContent: { xs: 'flex-start', md: 'flex-end' },
+                                alignItems: 'flex-start',
+                                mt: { xs: 1, md: 1.5 }
+                            }}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon={<Add />}
+                                    onClick={() => setOpenAddDialog(true)}
+                                    sx={{
+                                        borderRadius: '8px',
+                                        textTransform: 'none',
+                                        fontWeight: 500,
+                                        px: { xs: 1.5, md: 2 },
+                                        py: { xs: 0.5, md: 0.75 },
+                                        fontSize: { xs: '0.8rem', md: '0.875rem' },
+                                        width: { xs: 'auto', md: 'auto' },
+                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                                        '&:hover': {
+                                            boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
+                                            transform: 'translateY(-1px)'
+                                        },
+                                        transition: 'all 0.2s ease-in-out'
+                                    }}
+                                >
+                                    Add Contact
+                                </Button>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Button
-                                variant="outlined"
-                                color="primary"
-                                startIcon={<Add />}
-                                onClick={() => setOpenAddDialog(true)}
-                                sx={{
-                                    borderRadius: '8px',
-                                    textTransform: 'none',
-                                    fontWeight: 500,
-                                    px: 2.5,
-                                    py: 1,
-                                    borderWidth: '1.5px',
-                                    '&:hover': {
-                                        borderWidth: '2px',
-                                        transform: 'translateY(-1px)'
-                                    },
-                                    transition: 'all 0.2s ease-in-out'
-                                }}
-                            >
-                                Add Contact
-                            </Button>
-                        </Grid>
-                    </Grid>
+                    </Box>
 
-                    {/* Contacts Data Grid */}
-                    <ContactsDataGrid
+                    {/* Contacts Table */}
+                    <ResponsiveContactsTable
                         contacts={contacts}
                         loading={loading}
                         onViewContact={handleViewContact}
