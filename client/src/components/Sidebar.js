@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Drawer,
   List,
@@ -30,6 +30,7 @@ import {
 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { NavLink } from 'react-router-dom';
+import { getVersionInfo } from '../services/versionService';
 
 const Sidebar = () => {
   const theme = useTheme();
@@ -39,6 +40,23 @@ const Sidebar = () => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedLanguage, setSelectedLanguage] = useState('EN');
+  const [version, setVersion] = useState('0.1.0');
+  const [releaseDate, setReleaseDate] = useState(null);
+
+  // Fetch version info on component mount
+  useEffect(() => {
+    const fetchVersionInfo = async () => {
+      try {
+        const versionInfo = await getVersionInfo();
+        setVersion(versionInfo.version);
+        setReleaseDate(versionInfo.releaseDate);
+      } catch (error) {
+        console.error('Failed to fetch version info:', error);
+      }
+    };
+
+    fetchVersionInfo();
+  }, []);
 
   // Info Popover functions
   const handlePopoverOpen = (event) => {
@@ -187,13 +205,13 @@ const Sidebar = () => {
             >
               <Box sx={{ p: 2, minWidth: '200px' }}>
                 <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>
-                  PhishIntel Community Edition
+                  Community Edition
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                  Release Date: 2025-01-01
+                  Release Date: {releaseDate || 'N/A'}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Version: 0.1.0
+                  Version: {version}
                 </Typography>
               </Box>
             </Popover>
