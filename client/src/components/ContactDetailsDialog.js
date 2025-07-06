@@ -11,6 +11,15 @@ import {
     Card
 } from '@mui/material';
 import { Person, Group, Add } from '@mui/icons-material';
+import { 
+    dialogPaperProps, 
+    gradientHeaderStyles, 
+    contactAvatarStyles,
+    cardStyles,
+    sectionHeaderStyles,
+    fieldLabelStyles,
+    fieldValueStyles
+} from '../utils/styles';
 
 const ContactDetailsDialog = ({ open, onClose, contact }) => {
     if (!contact) return null;
@@ -21,18 +30,9 @@ const ContactDetailsDialog = ({ open, onClose, contact }) => {
             onClose={onClose}
             fullWidth
             maxWidth="md"
-            PaperProps={{
-                sx: {
-                    borderRadius: 3,
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.12)'
-                }
-            }}
+            PaperProps={dialogPaperProps}
         >
-            <DialogTitle sx={{ 
-                background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
-                color: 'white',
-                borderRadius: '12px 12px 0 0'
-            }}>
+            <DialogTitle sx={gradientHeaderStyles}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <Person sx={{ fontSize: 28 }} />
                     <Typography variant="h6">Contact Details</Typography>
@@ -50,18 +50,7 @@ const ContactDetailsDialog = ({ open, onClose, contact }) => {
                         bgcolor: 'grey.50',
                         borderRadius: 2
                     }}>
-                        <Box sx={{
-                            width: 60,
-                            height: 60,
-                            borderRadius: '50%',
-                            bgcolor: 'primary.main',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white',
-                            fontSize: '1.5rem',
-                            fontWeight: 'bold'
-                        }}>
+                        <Box sx={contactAvatarStyles}>
                             {`${contact.firstName?.charAt(0) || ''}${contact.lastName?.charAt(0) || ''}`.toUpperCase()}
                         </Box>
                         <Box>
@@ -77,53 +66,41 @@ const ContactDetailsDialog = ({ open, onClose, contact }) => {
                     <Grid container spacing={3}>
                         {/* Basic Information Card */}
                         <Grid item xs={12} md={6}>
-                            <Card sx={{ 
-                                p: 2, 
-                                borderRadius: 2,
-                                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                                border: '1px solid',
-                                borderColor: 'grey.200'
-                            }}>
-                                <Typography variant="h6" gutterBottom sx={{ 
-                                    color: 'primary.main',
-                                    fontWeight: 'bold',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 1
-                                }}>
+                            <Card sx={cardStyles}>
+                                <Typography variant="h6" gutterBottom sx={sectionHeaderStyles}>
                                     <Person fontSize="small" />
                                     Basic Information
                                 </Typography>
                                 <Box sx={{ mt: 2 }}>
                                     <Box sx={{ mb: 2 }}>
-                                        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold' }}>
+                                        <Typography variant="caption" sx={fieldLabelStyles}>
                                             EMAIL ADDRESS
                                         </Typography>
-                                        <Typography variant="body1" sx={{ mt: 0.5 }}>
+                                        <Typography variant="body1" sx={fieldValueStyles}>
                                             {contact.email || 'Not provided'}
                                         </Typography>
                                     </Box>
                                     <Box sx={{ mb: 2 }}>
-                                        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold' }}>
+                                        <Typography variant="caption" sx={fieldLabelStyles}>
                                             PHONE NUMBER
                                         </Typography>
-                                        <Typography variant="body1" sx={{ mt: 0.5 }}>
+                                        <Typography variant="body1" sx={fieldValueStyles}>
                                             {contact.phoneNumber || 'Not provided'}
                                         </Typography>
                                     </Box>
                                     <Box sx={{ mb: 2 }}>
-                                        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold' }}>
+                                        <Typography variant="caption" sx={fieldLabelStyles}>
                                             ROLE
                                         </Typography>
-                                        <Typography variant="body1" sx={{ mt: 0.5 }}>
+                                        <Typography variant="body1" sx={fieldValueStyles}>
                                             {contact.role || 'Not specified'}
                                         </Typography>
                                     </Box>
                                     <Box>
-                                        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold' }}>
+                                        <Typography variant="caption" sx={fieldLabelStyles}>
                                             COUNTRY
                                         </Typography>
-                                        <Typography variant="body1" sx={{ mt: 0.5 }}>
+                                        <Typography variant="body1" sx={fieldValueStyles}>
                                             {contact.country || 'Not specified'}
                                         </Typography>
                                     </Box>
@@ -133,21 +110,8 @@ const ContactDetailsDialog = ({ open, onClose, contact }) => {
 
                         {/* Metadata Card */}
                         <Grid item xs={12} md={6}>
-                            <Card sx={{ 
-                                p: 2, 
-                                borderRadius: 2,
-                                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                                border: '1px solid',
-                                borderColor: 'grey.200',
-                                height: 'fit-content'
-                            }}>
-                                <Typography variant="h6" gutterBottom sx={{ 
-                                    color: 'primary.main',
-                                    fontWeight: 'bold',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 1
-                                }}>
+                            <Card sx={{ ...cardStyles, height: 'fit-content' }}>
+                                <Typography variant="h6" gutterBottom sx={sectionHeaderStyles}>
                                     <Group fontSize="small" />
                                     Additional Information
                                 </Typography>
@@ -155,10 +119,10 @@ const ContactDetailsDialog = ({ open, onClose, contact }) => {
                                     <Box sx={{ mt: 2 }}>
                                         {Object.entries(contact.metadata).map(([key, value]) => (
                                             <Box key={key} sx={{ mb: 2 }}>
-                                                <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold' }}>
+                                                <Typography variant="caption" sx={fieldLabelStyles}>
                                                     {key.toUpperCase().replace(/_/g, ' ')}
                                                 </Typography>
-                                                <Typography variant="body1" sx={{ mt: 0.5 }}>
+                                                <Typography variant="body1" sx={fieldValueStyles}>
                                                     {value || 'Not provided'}
                                                 </Typography>
                                             </Box>
@@ -174,40 +138,28 @@ const ContactDetailsDialog = ({ open, onClose, contact }) => {
 
                         {/* Timestamps Card */}
                         <Grid item xs={12}>
-                            <Card sx={{ 
-                                p: 2, 
-                                borderRadius: 2,
-                                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                                border: '1px solid',
-                                borderColor: 'grey.200'
-                            }}>
-                                <Typography variant="h6" gutterBottom sx={{ 
-                                    color: 'primary.main',
-                                    fontWeight: 'bold',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 1
-                                }}>
+                            <Card sx={cardStyles}>
+                                <Typography variant="h6" gutterBottom sx={sectionHeaderStyles}>
                                     <Add fontSize="small" />
                                     Record Information
                                 </Typography>
                                 <Grid container spacing={2} sx={{ mt: 2 }}>
                                     <Grid item xs={12} md={6}>
                                         <Box>
-                                            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold' }}>
+                                            <Typography variant="caption" sx={fieldLabelStyles}>
                                                 CREATED
                                             </Typography>
-                                            <Typography variant="body1" sx={{ mt: 0.5 }}>
+                                            <Typography variant="body1" sx={fieldValueStyles}>
                                                 {contact.createdAt ? new Date(contact.createdAt).toLocaleString() : 'Unknown'}
                                             </Typography>
                                         </Box>
                                     </Grid>
                                     <Grid item xs={12} md={6}>
                                         <Box>
-                                            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold' }}>
+                                            <Typography variant="caption" sx={fieldLabelStyles}>
                                                 LAST UPDATED
                                             </Typography>
-                                            <Typography variant="body1" sx={{ mt: 0.5 }}>
+                                            <Typography variant="body1" sx={fieldValueStyles}>
                                                 {contact.updatedAt ? new Date(contact.updatedAt).toLocaleString() : 'Unknown'}
                                             </Typography>
                                         </Box>

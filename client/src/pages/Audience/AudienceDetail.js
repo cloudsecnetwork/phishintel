@@ -30,6 +30,7 @@ import { useAudience } from '../../hooks/useAudience';
 import ContactDetailsDialog from '../../components/ContactDetailsDialog';
 import AddContactDialog from '../../components/AddContactDialog';
 import CSVUploadDialog from '../../components/CSVUploadDialog';
+import DeleteAudienceDialog from '../../components/DeleteAudienceDialog';
 import ContactsDataGrid from '../../components/ContactsDataGrid';
 
 const AudienceDetail = () => {
@@ -67,53 +68,50 @@ const AudienceDetail = () => {
 
     // State for CSV upload dialog
     const [openCSVDialog, setOpenCSVDialog] = useState(false);
-    const [csvFile, setCsvFile] = useState(null);
-    const [csvUploadResult, setCsvUploadResult] = useState(null);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [uploadStatus, setUploadStatus] = useState(null);
+    const [uploadMessage, setUploadMessage] = useState('');
 
     // State for view contact dialog
     const [openViewDialog, setOpenViewDialog] = useState(false);
     const [selectedContact, setSelectedContact] = useState(null);
 
-    // Handler for CSV file selection
-    const handleCSVFileChange = (file) => {
-        setCsvFile(file);
-        setCsvUploadResult(null); // Clear previous results
-    };
+    // Handler for CSV file upload
+    const handleCSVFileUpload = async (file) => {
+        setUploadProgress(10);
+        setUploadStatus(null);
+        setUploadMessage('');
 
-    // Handler for CSV upload
-    const handleCSVUpload = async () => {
-        if (!csvFile) {
-            setErrorSnackbar({ 
-                open: true, 
-                message: 'Please select a CSV file to upload' 
-            });
-            return;
-        }
-
-        const response = await uploadCSVToAudience(id, csvFile);
-        if (response.success) {
-            setCsvUploadResult(response.data);
-            setCsvFile(null);
+        try {
+            setUploadProgress(50);
+            const response = await uploadCSVToAudience(id, file);
             
-            // Refresh the audience details to get updated contact list
-            const updatedResponse = await fetchAudienceDetail(id);
-            if (updatedResponse?.data?.contacts) {
-                setContacts(updatedResponse.data.contacts);
+            if (response.success) {
+                setUploadProgress(100);
+                setUploadStatus('success');
+                setUploadMessage(`Successfully uploaded CSV file. ${response.data.added} contacts added, ${response.data.duplicates} duplicates skipped.`);
+                
+                // Refresh the audience details to get updated contact list
+                const updatedResponse = await fetchAudienceDetail(id);
+                if (updatedResponse?.data?.contacts) {
+                    setContacts(updatedResponse.data.contacts);
+                }
+            } else {
+                setUploadStatus('error');
+                setUploadMessage(response.message || 'Failed to upload CSV file');
             }
-            // Don't close dialog yet, show results
-        } else {
-            setErrorSnackbar({ 
-                open: true, 
-                message: response.message || 'Failed to upload CSV file' 
-            });
+        } catch (error) {
+            setUploadStatus('error');
+            setUploadMessage('An error occurred while uploading the file');
         }
     };
 
     // Handler for closing CSV dialog
     const handleCloseCSVDialog = () => {
         setOpenCSVDialog(false);
-        setCsvFile(null);
-        setCsvUploadResult(null);
+        setUploadProgress(0);
+        setUploadStatus(null);
+        setUploadMessage('');
     };
 
     useEffect(() => {
@@ -380,23 +378,15 @@ const AudienceDetail = () => {
                 <Footer />
             </Box>
 
-            {/* Delete Confirmation Dialog */}
-            <Dialog open={openDeleteDialog} onClose={() => setOpenDeleteDialog(false)}>
-                <DialogTitle>Delete Audience</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Are you sure you want to delete this audience? This action cannot be undone.
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setOpenDeleteDialog(false)} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleDeleteAudience} color="error">
-                        Delete
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            {/* Delete Audience Dialog */}
+            <DeleteAudienceDialog
+                open={openDeleteDialog}
+                onClose={() => setOpenDeleteDialog(false)}
+                onConfirm={handleDeleteAudience}
+                audienceName={audienceDetail?.name || 'N/A'}
+                contactCount={audienceDetail?.contactCount || 0}
+                loading={loading}
+            />
 
             {/* Add Contact Dialog */}
             <AddContactDialog
@@ -412,11 +402,10 @@ const AudienceDetail = () => {
             <CSVUploadDialog
                 open={openCSVDialog}
                 onClose={handleCloseCSVDialog}
-                csvFile={csvFile}
-                onFileChange={handleCSVFileChange}
-                onUpload={handleCSVUpload}
-                csvUploadResult={csvUploadResult}
-                loading={loading}
+                onFileUpload={handleCSVFileUpload}
+                uploadProgress={uploadProgress}
+                uploadStatus={uploadStatus}
+                uploadMessage={uploadMessage}
             />
 
             {/* View Contact Dialog */}

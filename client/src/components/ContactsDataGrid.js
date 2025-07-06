@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { Visibility as VisibilityIcon, HighlightOff as HighlightOffIcon } from '@mui/icons-material';
+import { dataGridStyles, actionButtonsStyles, loadingContainerStyles } from '../utils/styles';
 
 const ContactsDataGrid = ({ 
     contacts, 
@@ -45,13 +46,7 @@ const ContactsDataGrid = ({
             flex: 0.15,
             sortable: false,
             renderCell: (params) => (
-                <Box sx={{ 
-                    display: 'flex', 
-                    gap: 1, 
-                    alignItems: 'center', 
-                    height: '100%',
-                    justifyContent: 'center'
-                }}>
+                <Box sx={actionButtonsStyles}>
                     <IconButton 
                         color="primary" 
                         size="small"
@@ -75,7 +70,7 @@ const ContactsDataGrid = ({
 
     if (loading) {
         return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '300px' }}>
+            <Box sx={loadingContainerStyles}>
                 <CircularProgress />
                 <Typography sx={{ ml: 2 }}>Loading Contacts...</Typography>
             </Box>
@@ -96,15 +91,7 @@ const ContactsDataGrid = ({
             columns={columns}
             getRowId={(row) => row._id}
             autoHeight
-            sx={{
-                bgcolor: '#fff',
-                borderRadius: 2,
-                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-                p: 1,
-                '& .MuiDataGrid-columnHeaderTitle': {
-                    fontWeight: 'bold',
-                },
-            }}
+            sx={dataGridStyles}
         />
     );
 };
