@@ -26,17 +26,14 @@ const contactSchema = new Schema({
         type: String,
         trim: true
     },
-    department: {
-        type: String,
-        trim: true
-    },
-    company: {
-        type: String,
-        trim: true
-    },
     country: {
         type: String,
         trim: true
+    },
+    metadata: {
+        type: Map,
+        of: Schema.Types.Mixed,
+        default: new Map()
     }
 }, { timestamps: true });
 

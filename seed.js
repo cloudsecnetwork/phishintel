@@ -27,9 +27,12 @@ const seedDatabase = async () => {
                 email: 'adeola.ogunleye@abcnigeria.org',
                 phoneNumber: '08012345678',
                 role: 'Manager',
-                department: 'Marketing',
-                company: 'American Business Council',
                 country: 'Nigeria',
+                metadata: new Map([
+                    ['department', 'Marketing'],
+                    ['company', 'American Business Council'],
+                    ['location', 'Lagos']
+                ])
             },
             {
                 firstName: 'Chukwudi',
@@ -37,9 +40,12 @@ const seedDatabase = async () => {
                 email: 'chukwudi.okeke@draperuniversity.com',
                 phoneNumber: '08123456789',
                 role: 'Developer',
-                department: 'Engineering',
-                company: 'Draper University',
                 country: 'Nigeria',
+                metadata: new Map([
+                    ['department', 'Engineering'],
+                    ['company', 'Draper University'],
+                    ['skills', 'JavaScript, Python']
+                ])
             },
             {
                 firstName: 'Funmi',
@@ -47,9 +53,12 @@ const seedDatabase = async () => {
                 email: 'funmi.adetayo@comercio.com.ng',
                 phoneNumber: '07098765432',
                 role: 'Designer',
-                department: 'Design',
-                company: 'Comercio',
                 country: 'Nigeria',
+                metadata: new Map([
+                    ['department', 'Design'],
+                    ['company', 'Comercio'],
+                    ['tools', 'Figma, Adobe Creative Suite']
+                ])
             },
             {
                 firstName: 'Bolaji',
@@ -57,9 +66,12 @@ const seedDatabase = async () => {
                 email: 'bolaji.adekunle@teknowledge.com.ng',
                 phoneNumber: '09087654321',
                 role: 'Analyst',
-                department: 'Finance',
-                company: 'Teknowledge',
                 country: 'Nigeria',
+                metadata: new Map([
+                    ['department', 'Finance'],
+                    ['company', 'Teknowledge'],
+                    ['experience', '3 years']
+                ])
             },
             {
                 firstName: 'Ngozi',
@@ -67,9 +79,12 @@ const seedDatabase = async () => {
                 email: 'ngozi.nwachukwu@naijasecforce.ng',
                 phoneNumber: '08098765432',
                 role: 'HR Specialist',
-                department: 'Human Resources',
-                company: 'Naijasecforce',
                 country: 'Nigeria',
+                metadata: new Map([
+                    ['department', 'Human Resources'],
+                    ['company', 'Naijasecforce'],
+                    ['certifications', 'PHR, SHRM-CP']
+                ])
             },
         ];
 

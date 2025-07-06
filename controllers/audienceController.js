@@ -209,7 +209,7 @@ export const deleteAudience = async (req, res) => {
 export const addContactToAudience = async (req, res) => {
     try {
         const { id } = req.params; // Audience ID
-        const { firstName, lastName, email, phoneNumber, role, department, company, country } = req.body;
+        const { firstName, lastName, email, phoneNumber, role, country, metadata } = req.body;
 
         // Validate required fields
         if (!firstName || !email) {
@@ -247,9 +247,8 @@ export const addContactToAudience = async (req, res) => {
             email,
             phoneNumber,
             role,
-            department,
-            company,
-            country
+            country,
+            metadata: metadata || new Map()
         });
 
         // Save the new contact to the database

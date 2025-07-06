@@ -8,27 +8,29 @@ import {
     Card,
     CardContent,
     Divider,
-    TextField,
     Button,
-    CircularProgress,
     Dialog,
     DialogTitle,
     DialogActions,
     DialogContent,
-    Chip,
     Alert,
     DialogContentText,
-    Snackbar
+    Snackbar,
+    IconButton,
+    Menu,
+    MenuItem
 } from '@mui/material';
-import { Group, Person, Add, UploadFile as UploadFileIcon } from '@mui/icons-material';
+import { Group, Person, Add, UploadFile as UploadFileIcon, MoreVert as MoreVertIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import Sidebar from '../../components/Sidebar';
 import Footer from '../../components/Footer';
-import { DataGrid } from '@mui/x-data-grid';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { Menu, MenuItem, IconButton } from '@mui/material';
-import { MoreVert as MoreVertIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAudience } from '../../hooks/useAudience';
+
+// Import new components
+import ContactDetailsDialog from '../../components/ContactDetailsDialog';
+import AddContactDialog from '../../components/AddContactDialog';
+import CSVUploadDialog from '../../components/CSVUploadDialog';
+import ContactsDataGrid from '../../components/ContactsDataGrid';
 
 const AudienceDetail = () => {
     const { id } = useParams();
@@ -44,9 +46,8 @@ const AudienceDetail = () => {
         email: '',
         phoneNumber: '',
         role: '',
-        department: '',
-        company: '',
-        country: ''
+        country: '',
+        metadata: {}
     });
 
     // Error handling state
@@ -68,6 +69,10 @@ const AudienceDetail = () => {
     const [openCSVDialog, setOpenCSVDialog] = useState(false);
     const [csvFile, setCsvFile] = useState(null);
     const [csvUploadResult, setCsvUploadResult] = useState(null);
+
+    // State for view contact dialog
+    const [openViewDialog, setOpenViewDialog] = useState(false);
+    const [selectedContact, setSelectedContact] = useState(null);
 
     // Handler for CSV file selection
     const handleCSVFileChange = (file) => {
@@ -181,9 +186,8 @@ const AudienceDetail = () => {
                 email: '',
                 phoneNumber: '',
                 role: '',
-                department: '',
-                company: '',
-                country: ''
+                country: '',
+                metadata: {}
             });
             setFormErrors({}); // Clear form errors
         } else {
@@ -217,23 +221,15 @@ const AudienceDetail = () => {
         }
     };
 
-    const columns = [
-        { field: 'firstName', headerName: 'First Name', flex: 0.25 },
-        { field: 'lastName', headerName: 'Last Name', flex: 0.25 },
-        { field: 'email', headerName: 'Email Address', flex: 0.3 },
-        { field: 'role', headerName: 'Role', flex: 0.2 },
-        {
-            field: 'actions',
-            headerName: 'Action',
-            flex: 0.1,
-            sortable: false,
-            renderCell: (params) => (
-                <IconButton color="error" onClick={() => handleDeleteContact(params.row._id)}>
-                    <HighlightOffIcon />
-                </IconButton>
-            ),
-        },
-    ];
+    const handleViewContact = (contact) => {
+        setSelectedContact(contact);
+        setOpenViewDialog(true);
+    };
+
+    const handleCloseViewDialog = () => {
+        setOpenViewDialog(false);
+        setSelectedContact(null);
+    };
 
     return (
         <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: "#f0f4f7" }}>
@@ -373,33 +369,13 @@ const AudienceDetail = () => {
                         </Grid>
                     </Grid>
 
-                    {/* Handling Loading and Empty State */}
-                    {loading ? (
-                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '300px' }}>
-                            <CircularProgress />
-                            <Typography sx={{ ml: 2 }}>Loading Contacts...</Typography>
-                        </Box>
-                    ) : contacts.length === 0 ? (
-                        <Typography variant="body1" color="text.secondary" align="center" sx={{ mt: 3 }}>
-                            No contacts found for this audience.
-                        </Typography>
-                    ) : (
-                        <DataGrid
-                            rows={contacts}
-                            columns={columns}
-                            getRowId={(row) => row._id}
-                            autoHeight
-                            sx={{
-                                bgcolor: '#fff',
-                                borderRadius: 2,
-                                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-                                p: 1,
-                                '& .MuiDataGrid-columnHeaderTitle': {
-                                    fontWeight: 'bold',
-                                },
-                            }}
-                        />
-                    )}
+                    {/* Contacts Data Grid */}
+                    <ContactsDataGrid
+                        contacts={contacts}
+                        loading={loading}
+                        onViewContact={handleViewContact}
+                        onDeleteContact={handleDeleteContact}
+                    />
                 </Container>
                 <Footer />
             </Box>
@@ -422,128 +398,33 @@ const AudienceDetail = () => {
                 </DialogActions>
             </Dialog>
 
-            <Dialog
+            {/* Add Contact Dialog */}
+            <AddContactDialog
                 open={openAddDialog}
                 onClose={() => setOpenAddDialog(false)}
-                fullWidth
-                maxWidth="md"
-            >
-                <DialogTitle>Add New Contact</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Please fill in the details for the new contact.
-                    </DialogContentText>
-                    <form>
-                        <Grid container spacing={2} sx={{ mt: 2 }}>
-                            {[
-                                { name: 'firstName', label: 'First Name', required: true },
-                                { name: 'lastName', label: 'Last Name (optional)', required: false },
-                                { name: 'email', label: 'Email', required: true },
-                                { name: 'phoneNumber', label: 'Phone Number (optional)', required: false },
-                                { name: 'role', label: 'Role (optional)', required: false },
-                                { name: 'department', label: 'Department (optional)', required: false },
-                                { name: 'company', label: 'Company (optional)', required: false },
-                                { name: 'country', label: 'Country (optional)', required: false }
-                            ].map((field, index) => (
-                                <Grid item xs={12} md={6} key={field.name}>
-                                    <TextField
-                                        autoFocus={index === 0}
-                                        margin="dense"
-                                        name={field.name}
-                                        label={field.label}
-                                        type={field.name === 'email' ? 'email' : 'text'}
-                                        fullWidth
-                                        variant="outlined"
-                                        value={newContact[field.name]}
-                                        onChange={handleAddContactChange}
-                                        required={field.required}
-                                        error={!!formErrors[field.name]}
-                                        helperText={formErrors[field.name] || ''}
-                                        sx={{
-                                            '& .MuiInputLabel-root': {
-                                                '& .MuiInputLabel-asterisk': {
-                                                    color: 'error.main',
-                                                },
-                                            },
-                                        }}
-                                    />
-                                </Grid>
-                            ))}
-                        </Grid>
-                    </form>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setOpenAddDialog(false)} color="warning">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleAddContact} color="primary">
-                        Add
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                newContact={newContact}
+                onContactChange={handleAddContactChange}
+                onAddContact={handleAddContact}
+                formErrors={formErrors}
+            />
 
             {/* CSV Upload Dialog */}
-            <Dialog
+            <CSVUploadDialog
                 open={openCSVDialog}
                 onClose={handleCloseCSVDialog}
-                fullWidth
-                maxWidth="md"
-            >
-                <DialogTitle>Upload CSV to Audience</DialogTitle>
-                <DialogContent>
-                    <DialogContentText sx={{ mb: 2 }}>
-                        Upload a CSV file to add multiple contacts to this audience. 
-                        The file should contain columns: <strong>firstName</strong> and <strong>email</strong>.
-                        Duplicate emails will be automatically skipped.
-                    </DialogContentText>
-                    
-                    {!csvUploadResult ? (
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    fullWidth
-                                    type="file"
-                                    onChange={(e) => handleCSVFileChange(e.target.files[0])}
-                                    inputProps={{ accept: '.csv' }}
-                                    helperText="Select a CSV file with contact information"
-                                />
-                            </Grid>
-                        </Grid>
-                    ) : (
-                        <Box>
-                            <Alert severity="success" sx={{ mb: 2 }}>
-                                <Typography variant="h6" gutterBottom>
-                                    Upload Results
-                                </Typography>
-                                <Typography variant="body2">
-                                    • Total processed: {csvUploadResult.totalProcessed} contacts<br/>
-                                    • Successfully added: {csvUploadResult.added} contacts<br/>
-                                    • Duplicates skipped: {csvUploadResult.duplicates} contacts
-                                </Typography>
-                                {csvUploadResult.skippedRows.length > 0 && (
-                                    <Typography variant="body2" sx={{ mt: 1 }}>
-                                        • Skipped rows: {csvUploadResult.skippedRows.join(', ')}
-                                    </Typography>
-                                )}
-                            </Alert>
-                        </Box>
-                    )}
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseCSVDialog} color="primary">
-                        {csvUploadResult ? 'Close' : 'Cancel'}
-                    </Button>
-                    {!csvUploadResult && (
-                        <Button 
-                            onClick={handleCSVUpload} 
-                            color="primary" 
-                            disabled={!csvFile || loading}
-                        >
-                            {loading ? 'Uploading...' : 'Upload'}
-                        </Button>
-                    )}
-                </DialogActions>
-            </Dialog>
+                csvFile={csvFile}
+                onFileChange={handleCSVFileChange}
+                onUpload={handleCSVUpload}
+                csvUploadResult={csvUploadResult}
+                loading={loading}
+            />
+
+            {/* View Contact Dialog */}
+            <ContactDetailsDialog
+                open={openViewDialog}
+                onClose={handleCloseViewDialog}
+                contact={selectedContact}
+            />
 
             {/* Error Snackbar */}
             <Snackbar

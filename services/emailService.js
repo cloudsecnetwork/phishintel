@@ -42,10 +42,11 @@ export const sendMultipleEmails = async (trackingEntry, senderProfile, template,
             email: trackingEntry.contact.email,
             phoneNumber: trackingEntry.contact.phoneNumber,
             role: trackingEntry.contact.role,
-            department: trackingEntry.contact.department,
-            company: trackingEntry.contact.company,
             country: trackingEntry.contact.country,
-            link
+            link,
+            // Add metadata fields if they exist
+            department: trackingEntry.contact.metadata?.get('department') || '',
+            company: trackingEntry.contact.metadata?.get('company') || ''
         };
 
         // Render email body directly from the passed template object and contact data
