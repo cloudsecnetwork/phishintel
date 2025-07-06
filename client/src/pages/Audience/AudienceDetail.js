@@ -364,7 +364,7 @@ const AudienceDetail = () => {
                                                         fontWeight: 400,
                                                         fontSize: '0.875rem'
                                                     }}>
-                                                        Loading audience...
+                                                        {/* Loading audience... */}
                                                     </Box>
                                                 ) : audienceDetail?.name || 'N/A'}
                                             </Typography>
@@ -400,7 +400,7 @@ const AudienceDetail = () => {
                                                     mb: 0.5
                                                 }}
                                             >
-                                                Unique Contacts
+                                                Contacts
                                             </Typography>
                                             <Typography 
                                                 variant="h6" 
@@ -416,7 +416,7 @@ const AudienceDetail = () => {
                                                         fontWeight: 400,
                                                         fontSize: '0.875rem'
                                                     }}>
-                                                        Loading...
+                                                        {/* Loading... */}
                                                     </Box>
                                                 ) : audienceDetail?.contactCount || 0}
                                             </Typography>
