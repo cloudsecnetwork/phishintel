@@ -120,14 +120,14 @@ const Templates = () => {
                                     backgroundClip: 'text',
                                     WebkitBackgroundClip: 'text',
                                     WebkitTextFillColor: 'transparent',
-                                    fontSize: { xs: '1.2rem', md: '1.8rem' }
+                                    fontSize: { xs: '1rem', md: '1.5rem' },
                                 }} 
                                 variant="h4" 
                                 color="primary"
                             >
                                 Email Templates
                             </Typography>
-                            <Typography sx={{ fontSize: 13 }} color="text.secondary">
+                            <Typography sx={{ fontSize: '0.8rem' }} color="text.secondary">
                                 Import and manage HTML email templates. Upload your existing templates or create new ones using the AI Email builder (coming soon).
                             </Typography>
                         </Grid>

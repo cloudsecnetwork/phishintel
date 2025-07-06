@@ -141,7 +141,7 @@ const ContactDetailsDialog = ({ open, onClose, contact }) => {
                             <Card sx={cardStyles}>
                                 <Typography variant="h6" gutterBottom sx={sectionHeaderStyles}>
                                     <Add fontSize="small" />
-                                    Record Information
+                                    Timestamps
                                 </Typography>
                                 <Grid container spacing={2} sx={{ mt: 2 }}>
                                     <Grid item xs={12} md={6}>

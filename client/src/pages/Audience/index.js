@@ -34,14 +34,14 @@ const Audience = () => {
                                     backgroundClip: 'text',
                                     WebkitBackgroundClip: 'text',
                                     WebkitTextFillColor: 'transparent',
-                                    fontSize: { xs: '1.2rem', md: '1.8rem' }
+                                    fontSize: { xs: '1rem', md: '1.5rem' }
                                 }} 
                                 variant="h4" 
                                 color="primary"
                             >
                                 Audience
                             </Typography>
-                            <Typography sx={{ fontSize: 13 }} color="text.secondary">
+                            <Typography sx={{ fontSize: '0.8rem' }} color="text.secondary">
                                 Manage your contacts and target audience for phishing campaigns.
                             </Typography>
                         </Grid>

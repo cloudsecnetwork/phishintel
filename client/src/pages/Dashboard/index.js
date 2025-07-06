@@ -47,7 +47,7 @@ const Dashboard = () => {
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
-                    fontSize: { xs: '1.2rem', md: '1.8rem' }
+                    fontSize: { xs: '1rem', md: '1.5rem' }
                   }} 
                   variant="h4" 
                   color="primary"
@@ -56,8 +56,7 @@ const Dashboard = () => {
                 </Typography>
                 <Typography 
                   sx={{ 
-                    fontSize: { xs: 13, md: 14 },
-                    fontWeight: 400,
+                    fontSize: '0.8rem',
                     lineHeight: 1.6,
                     color: 'text.secondary',
                     opacity: 0.8
