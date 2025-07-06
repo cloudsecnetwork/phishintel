@@ -52,7 +52,7 @@ export const createTemplate = async (req, res) => {
 
             // Validate placeholders with double curly brackets
             const supportedFields = [
-                'firstName', 'lastName', 'email', 'phoneNumber', 'role', 'department', 'company', 'country', 'link'
+                'firstName', 'lastName', 'email', 'phoneNumber', 'role', 'country', 'link', 'department', 'company'
             ];
             const placeholderErrors = validatePlaceholders(htmlContent, supportedFields);
 

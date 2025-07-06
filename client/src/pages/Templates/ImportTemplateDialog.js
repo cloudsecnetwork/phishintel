@@ -132,7 +132,7 @@ const ImportTemplateDialog = ({ open, onClose, onImport }) => {
                                 <Tooltip
                                     title={
                                         <span style={{ fontSize: '0.8rem', lineHeight: '1.5' }}>
-                                            Supported fields include: link, firstName, lastName, email, phoneNumber, role, department, company, and country.
+                                            Supported fields include: link, firstName, lastName, email, phoneNumber, role, and country.
                                             Ensure these fields exist in your uploaded contacts to avoid errors.
                                         </span>
                                     }
