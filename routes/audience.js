@@ -5,7 +5,8 @@ import {
     getAudienceById,
     deleteAudience,
     addContactToAudience,
-    deleteContactFromAudience
+    deleteContactFromAudience,
+    uploadCSVToAudience
 } from '../controllers/audienceController.js';
 import { uploadCSV } from '../middlewares/uploadCSV.js'; // Updated path for middleware
 import authMiddleware from '../middlewares/authMiddleware.js';
@@ -18,6 +19,9 @@ router.use(authMiddleware);
 // Create
 router.post('/', uploadCSV, createAudience);
 router.post('/:id/contact', addContactToAudience);
+
+// Upload CSV to existing audience
+router.post('/:id/upload-csv', uploadCSV, uploadCSVToAudience);
 
 // Read
 router.get('/', getAllAudiences);

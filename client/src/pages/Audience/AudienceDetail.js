@@ -20,7 +20,7 @@ import {
     DialogContentText,
     Snackbar
 } from '@mui/material';
-import { Group, Person, Add } from '@mui/icons-material';
+import { Group, Person, Add, UploadFile as UploadFileIcon } from '@mui/icons-material';
 import Sidebar from '../../components/Sidebar';
 import Footer from '../../components/Footer';
 import { DataGrid } from '@mui/x-data-grid';
@@ -33,7 +33,7 @@ import { useAudience } from '../../hooks/useAudience';
 const AudienceDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { audienceDetail, fetchAudienceDetail, deleteAudience, addContact, deleteContact, loading, error } = useAudience();
+    const { audienceDetail, fetchAudienceDetail, deleteAudience, addContact, deleteContact, uploadCSVToAudience, loading, error } = useAudience();
     const [contacts, setContacts] = useState([]);
     const [hasFetched, setHasFetched] = useState(false);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -68,6 +68,11 @@ const AudienceDetail = () => {
     const [openAIDialog, setOpenAIDialog] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
 
+    // State for CSV upload dialog
+    const [openCSVDialog, setOpenCSVDialog] = useState(false);
+    const [csvFile, setCsvFile] = useState(null);
+    const [csvUploadResult, setCsvUploadResult] = useState(null);
+
     // Handler for file selection
     const handleFileUpload = (file) => {
         setSelectedFile(file);
@@ -78,6 +83,48 @@ const AudienceDetail = () => {
         // Placeholder logic for uploading the file and enabling AI context
         console.log('File uploaded:', selectedFile);
         setOpenAIDialog(false); // Close the dialog after upload
+    };
+
+    // Handler for CSV file selection
+    const handleCSVFileChange = (file) => {
+        setCsvFile(file);
+        setCsvUploadResult(null); // Clear previous results
+    };
+
+    // Handler for CSV upload
+    const handleCSVUpload = async () => {
+        if (!csvFile) {
+            setErrorSnackbar({ 
+                open: true, 
+                message: 'Please select a CSV file to upload' 
+            });
+            return;
+        }
+
+        const response = await uploadCSVToAudience(id, csvFile);
+        if (response.success) {
+            setCsvUploadResult(response.data);
+            setCsvFile(null);
+            
+            // Refresh the audience details to get updated contact list
+            const updatedResponse = await fetchAudienceDetail(id);
+            if (updatedResponse?.data?.contacts) {
+                setContacts(updatedResponse.data.contacts);
+            }
+            // Don't close dialog yet, show results
+        } else {
+            setErrorSnackbar({ 
+                open: true, 
+                message: response.message || 'Failed to upload CSV file' 
+            });
+        }
+    };
+
+    // Handler for closing CSV dialog
+    const handleCloseCSVDialog = () => {
+        setOpenCSVDialog(false);
+        setCsvFile(null);
+        setCsvUploadResult(null);
     };
 
     useEffect(() => {
@@ -241,6 +288,10 @@ const AudienceDetail = () => {
                                     horizontal: 'right',
                                 }}
                             >
+                                <MenuItem onClick={() => setOpenCSVDialog(true)}>
+                                    <UploadFileIcon fontSize="small" sx={{ mr: 1 }} />
+                                    Upload CSV
+                                </MenuItem>
                                 <MenuItem onClick={() => setOpenDeleteDialog(true)}>
                                     <DeleteIcon fontSize="small" sx={{ mr: 1 }} />
                                     Delete Audience
@@ -512,6 +563,69 @@ const AudienceDetail = () => {
                     <Button onClick={handleEnableAIContext} color="primary" disabled={!selectedFile}>
                         Upload
                     </Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* CSV Upload Dialog */}
+            <Dialog
+                open={openCSVDialog}
+                onClose={handleCloseCSVDialog}
+                fullWidth
+                maxWidth="md"
+            >
+                <DialogTitle>Upload CSV to Audience</DialogTitle>
+                <DialogContent>
+                    <DialogContentText sx={{ mb: 2 }}>
+                        Upload a CSV file to add multiple contacts to this audience. 
+                        The file should contain columns: <strong>firstName</strong> and <strong>email</strong>.
+                        Duplicate emails will be automatically skipped.
+                    </DialogContentText>
+                    
+                    {!csvUploadResult ? (
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    fullWidth
+                                    type="file"
+                                    onChange={(e) => handleCSVFileChange(e.target.files[0])}
+                                    inputProps={{ accept: '.csv' }}
+                                    helperText="Select a CSV file with contact information"
+                                />
+                            </Grid>
+                        </Grid>
+                    ) : (
+                        <Box>
+                            <Alert severity="success" sx={{ mb: 2 }}>
+                                <Typography variant="h6" gutterBottom>
+                                    Upload Results
+                                </Typography>
+                                <Typography variant="body2">
+                                    • Total processed: {csvUploadResult.totalProcessed} contacts<br/>
+                                    • Successfully added: {csvUploadResult.added} contacts<br/>
+                                    • Duplicates skipped: {csvUploadResult.duplicates} contacts
+                                </Typography>
+                                {csvUploadResult.skippedRows.length > 0 && (
+                                    <Typography variant="body2" sx={{ mt: 1 }}>
+                                        • Skipped rows: {csvUploadResult.skippedRows.join(', ')}
+                                    </Typography>
+                                )}
+                            </Alert>
+                        </Box>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseCSVDialog} color="primary">
+                        {csvUploadResult ? 'Close' : 'Cancel'}
+                    </Button>
+                    {!csvUploadResult && (
+                        <Button 
+                            onClick={handleCSVUpload} 
+                            color="primary" 
+                            disabled={!csvFile || loading}
+                        >
+                            {loading ? 'Uploading...' : 'Upload'}
+                        </Button>
+                    )}
                 </DialogActions>
             </Dialog>
 
