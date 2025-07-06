@@ -26,7 +26,7 @@ import Footer from '../../components/Footer';
 import { DataGrid } from '@mui/x-data-grid';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { Menu, MenuItem, IconButton } from '@mui/material';
-import { MoreVert as MoreVertIcon, Delete as DeleteIcon, Memory as AIContextIcon } from '@mui/icons-material';
+import { MoreVert as MoreVertIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAudience } from '../../hooks/useAudience';
 
@@ -64,26 +64,10 @@ const AudienceDetail = () => {
         setMenuAnchorEl(null);
     };
 
-    // State for the AI Context dialog and file
-    const [openAIDialog, setOpenAIDialog] = useState(false);
-    const [selectedFile, setSelectedFile] = useState(null);
-
     // State for CSV upload dialog
     const [openCSVDialog, setOpenCSVDialog] = useState(false);
     const [csvFile, setCsvFile] = useState(null);
     const [csvUploadResult, setCsvUploadResult] = useState(null);
-
-    // Handler for file selection
-    const handleFileUpload = (file) => {
-        setSelectedFile(file);
-    };
-
-    // Placeholder handler for enabling AI context
-    const handleEnableAIContext = () => {
-        // Placeholder logic for uploading the file and enabling AI context
-        console.log('File uploaded:', selectedFile);
-        setOpenAIDialog(false); // Close the dialog after upload
-    };
 
     // Handler for CSV file selection
     const handleCSVFileChange = (file) => {
@@ -308,12 +292,6 @@ const AudienceDetail = () => {
                                     <DeleteIcon fontSize="small" sx={{ mr: 1 }} />
                                     Delete Audience
                                 </MenuItem>
-                                <MenuItem onClick={() => setOpenAIDialog(true)}
-                                    disabled={audienceDetail?.AIContextEnabled}>
-                                    <AIContextIcon fontSize="small" sx={{ mr: 1 }} />
-                                    Enable AI Context
-                                </MenuItem>
-                                {/* Add more menu items here if needed */}
                             </Menu>
                         </Grid>
                     </Grid>
@@ -328,7 +306,7 @@ const AudienceDetail = () => {
                     <Card sx={{ backgroundColor: "#ffffff", borderRadius: 2 }}>
                         <CardContent>
                             <Grid container spacing={3}>
-                                <Grid item xs={12} md={4}>
+                                <Grid item xs={12} md={6}>
                                     <Grid container spacing={2} alignItems="center">
                                         <Grid item>
                                             <Group color="primary" />
@@ -354,7 +332,7 @@ const AudienceDetail = () => {
                                     </Grid>
                                 </Grid>
 
-                                <Grid item xs={12} md={4}>
+                                <Grid item xs={12} md={6}>
                                     <Grid container spacing={2} alignItems="center">
                                         <Grid item>
                                             <Person color="primary" />
@@ -366,30 +344,6 @@ const AudienceDetail = () => {
                                             <Typography variant="h6" sx={{ fontWeight: 500 }}>
                                                 {loading ? 'Loading...' : audienceDetail?.contactCount || 0}
                                             </Typography>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-
-                                <Grid item xs={12} md={4}>
-                                    <Grid container spacing={2} alignItems="center">
-                                        <Grid item>
-                                            <AIContextIcon color="primary" />
-                                        </Grid>
-                                        <Grid sx={{ maxWidth: '85%' }} item>
-                                            <Typography variant="subtitle1" color="text.secondary">
-                                                AI Context
-                                            </Typography>
-                                            <Chip
-                                                size="small"
-                                                label={loading ? 'Loading...' : audienceDetail?.AIContextEnabled ? 'Enabled' : 'Disabled'}
-                                                color={
-                                                    loading
-                                                        ? 'default'
-                                                        : audienceDetail?.AIContextEnabled
-                                                            ? 'success'
-                                                            : 'default'
-                                                }
-                                            />
                                         </Grid>
                                     </Grid>
                                 </Grid>
@@ -524,56 +478,6 @@ const AudienceDetail = () => {
                     </Button>
                     <Button onClick={handleAddContact} color="primary">
                         Add
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
-            <Dialog
-                open={openAIDialog}
-                onClose={() => setOpenAIDialog(false)}
-                fullWidth
-                maxWidth="sm"
-            >
-                <DialogTitle>Enable AI Context</DialogTitle>
-                <DialogContent>
-                    <Grid container spacing={2}>
-
-                        {/* Instructions */}
-                        <Grid item xs={12}>
-                            <DialogContentText>
-                                Activate AI Context by uploading unique audience insights to enable intelligent, personalized email content.
-                            </DialogContentText>
-                        </Grid>
-
-                        {/* Info Box for Enterprise Users */}
-                        <Grid item xs={12}>
-                            <Alert severity="info" sx={{ mb: 2 }}>
-                                <Typography variant="body2">
-                                    <strong>Pro Feature:</strong> With an Enterprise License, this functionality is automated and seamlessly integrates with your existing systems.
-                                </Typography>
-                            </Alert>
-                        </Grid>
-
-                        {/* File Upload Input */}
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                type="file"
-                                onChange={(e) => handleFileUpload(e.target.files[0])}
-                                inputProps={{ accept: '.json,.csv' }}
-                                helperText={selectedFile ? selectedFile.name : "Upload a JSON or CSV file."}
-                                error={error && !selectedFile}
-                                required
-                            />
-                        </Grid>
-                    </Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setOpenAIDialog(false)} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleEnableAIContext} color="primary" disabled={!selectedFile}>
-                        Upload
                     </Button>
                 </DialogActions>
             </Dialog>
