@@ -66,20 +66,23 @@ const SenderProfile = () => {
                 <Container maxWidth="lg" sx={{ flexGrow: 1, mt: '110px', mb: 2 }}>
                     <Grid container spacing={2}>
                         <Grid sx={{ pl: 2, pb: 2 }} xs={12} md={8} lg={8}>
-                            <Typography variant="h5" color="primary">
-                                Sender Profile
+                            <Typography 
+                                sx={{ 
+                                    mb: 1, 
+                                    fontWeight: 500,
+                                    background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
+                                    backgroundClip: 'text',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    fontSize: { xs: '1.2rem', md: '1.8rem' }
+                                }} 
+                                variant="h4" 
+                                color="primary"
+                            >
+                                Sender Profiles
                             </Typography>
                             <Typography sx={{ fontSize: 13 }} color="text.secondary">
-                                Manage and configure your sender profile SMTP information. You can use{' '}
-                                {smtpProviders.map((provider, index) => (
-                                    <React.Fragment key={provider.name}>
-                                        <a href={provider.link} target="_blank" rel="noopener noreferrer">
-                                            {provider.name}
-                                        </a>
-                                        {index < smtpProviders.length - 1 ? ', ' : ' '}
-                                    </React.Fragment>
-                                ))}
-                                and other services.
+                                Configure and manage SMTP sender profiles for your email campaigns.
                             </Typography>
                         </Grid>
                         <Grid sx={{ p: 2 }} xs={12} md={4} lg={4}>

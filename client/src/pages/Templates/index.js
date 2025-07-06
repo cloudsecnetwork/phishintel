@@ -112,12 +112,23 @@ const Templates = () => {
                 <Container maxWidth="lg" sx={{ flexGrow: 1, mt: '110px', mb: 2 }}>
                     <Grid container spacing={2}>
                         <Grid sx={{ pl: 2, pb: 2 }} xs={12} md={8} lg={8}>
-                            <Typography variant="h5" color="primary">
+                            <Typography 
+                                sx={{ 
+                                    mb: 1, 
+                                    fontWeight: 500,
+                                    background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
+                                    backgroundClip: 'text',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    fontSize: { xs: '1.2rem', md: '1.8rem' }
+                                }} 
+                                variant="h4" 
+                                color="primary"
+                            >
                                 Email Templates
                             </Typography>
                             <Typography sx={{ fontSize: 13 }} color="text.secondary">
-                                Create and customize email templates by selecting layout options, color schemes, and content blocks.
-                                Once you’re done, generate and preview your new template.
+                                Import and manage HTML email templates. Upload your existing templates or create new ones using the AI Email builder (coming soon).
                             </Typography>
                         </Grid>
                         <Grid sx={{ p: 2 }} xs={12} md={4} lg={4}>

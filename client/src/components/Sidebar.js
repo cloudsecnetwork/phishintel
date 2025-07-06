@@ -20,13 +20,13 @@ import {
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
-  // Timeline as TimelineIcon,
   Group as GroupIcon,
   Outbox as OutboxIcon,
   Email as EmailIcon,
   Campaign as CampaignIcon,
   Menu as MenuIcon,
   Info as InfoIcon,
+  Help as HelpIcon,
 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { NavLink } from 'react-router-dom';
@@ -43,12 +43,12 @@ const Sidebar = () => {
   // Info Popover functions
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
-    setIsPopoverOpen(true); // Open the popover
+    setIsPopoverOpen(true);
   };
 
   const handlePopoverClose = () => {
     setAnchorEl(null);
-    setIsPopoverOpen(false); // Close the popover
+    setIsPopoverOpen(false);
   };
 
   // Language selection functions
@@ -60,13 +60,12 @@ const Sidebar = () => {
     setOpen(!open);
   };
 
-  // Grouped menu items
+  // Grouped menu items with enhanced structure
   const menuItems = [
     {
       group: 'Main',
       items: [
         { text: 'Dashboard', icon: <DashboardIcon />, path: '/console/dashboard' },
-        // { text: 'Timeline', icon: <TimelineIcon />, path: '/console/timeline' },
       ],
     },
     {
@@ -82,7 +81,13 @@ const Sidebar = () => {
 
   return (
     <>
-      <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
+      {/* Simple AppBar */}
+      <AppBar 
+        position="fixed" 
+        sx={{ 
+          zIndex: theme.zIndex.drawer + 1,
+        }}
+      >
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           {isMobile && (
             <IconButton
@@ -90,18 +95,47 @@ const Sidebar = () => {
               aria-label="open drawer"
               onClick={handleToggle}
               edge="start"
-              sx={{ mr: 2 }}
+              sx={{ 
+                mr: 2,
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.1)',
+                  transform: 'scale(1.05)',
+                },
+                transition: 'all 0.2s ease',
+              }}
             >
               <MenuIcon />
             </IconButton>
           )}
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: isMobile ? 1 : 0, fontWeight: 600 }}>
+          
+          <Typography 
+            variant="h6" 
+            noWrap 
+            component="div" 
+            sx={{ 
+              flexGrow: isMobile ? 1 : 0, 
+              fontWeight: 600,
+            }}
+          >
             PhishIntel
           </Typography>
+
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton size='large' color="inherit" onClick={handlePopoverOpen}>
+            <IconButton 
+              size='large' 
+              color="inherit" 
+              onClick={handlePopoverOpen}
+              sx={{
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.1)',
+                  transform: 'scale(1.05)',
+                },
+                transition: 'all 0.2s ease',
+              }}
+            >
               <InfoIcon />
             </IconButton>
+            
             <FormControl variant="outlined" size="small">
               <Select
                 labelId="language-select-label"
@@ -111,18 +145,18 @@ const Sidebar = () => {
                   color: 'white',
                   border: '1px solid white',
                   '& .MuiSelect-icon': {
-                    color: 'white', // Change the arrow icon color to white
+                    color: 'white',
                   },
                   '&:focus': {
-                    outline: 'none', // Remove focus outline
-                    border: '0px', // Ensure border remains 0px on focus
+                    outline: 'none',
+                    border: '0px',
                   },
                   '&:hover': {
-                    border: '0px', // Maintain no border on hover
+                    border: '0px',
                   },
                   '&.Mui-focused': {
-                    border: '0px', // Maintain no border when focused
-                    outline: 'none', // Ensure no outline when focused
+                    border: '0px',
+                    outline: 'none',
                   },
                 }}
               >
@@ -130,6 +164,7 @@ const Sidebar = () => {
                 <MenuItem value="FR">FR</MenuItem>
               </Select>
             </FormControl>
+            
             <Popover
               open={isPopoverOpen}
               anchorEl={anchorEl}
@@ -142,77 +177,153 @@ const Sidebar = () => {
                 vertical: 'top',
                 horizontal: 'right',
               }}
+              PaperProps={{
+                sx: {
+                  borderRadius: '12px',
+                  boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                  border: '1px solid rgba(0,0,0,0.08)',
+                }
+              }}
             >
-              <Typography sx={{ p: 2 }}>
-                PhishIntel Community Edition<br />
-                Release Date: 2025-01-01<br />
-                Version: 0.1.0
-              </Typography>
+              <Box sx={{ p: 2, minWidth: '200px' }}>
+                <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>
+                  PhishIntel Community Edition
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                  Release Date: 2025-01-01
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Version: 0.1.0
+                </Typography>
+              </Box>
             </Popover>
           </Box>
         </Toolbar>
       </AppBar>
+
+      {/* Enhanced Drawer */}
       <Drawer
         variant={isMobile ? "temporary" : "permanent"}
         sx={{
-          width: 240,
+          width: 260,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
-            width: 240,
+            width: 260,
             boxSizing: 'border-box',
+            border: 'none',
+            background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
+            boxShadow: '2px 0 10px rgba(0,0,0,0.08)',
           },
         }}
         open={open}
         onClose={handleToggle}
         ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
+          keepMounted: true,
         }}
       >
         <Toolbar />
-        <List>
+        
+        <List sx={{ pt: 1 }}>
           {menuItems.map((group) => (
             <Box key={group.group}>
-              <Typography variant="subtitle2" color='text.secondary' sx={{ padding: '16px', fontWeight: 'bold' }}>
+              {/* Enhanced Section Headers */}
+              <Typography 
+                variant="subtitle2" 
+                color='text.secondary' 
+                sx={{ 
+                  px: 3, 
+                  py: 1.5, 
+                  fontWeight: 700,
+                  fontSize: '0.75rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  color: theme.palette.text.secondary,
+                  opacity: 0.7,
+                }}
+              >
                 {group.group}
               </Typography>
+              
               {group.items.map((item) => (
                 <ListItem
                   key={item.text}
-                  component={NavLink} // Change to NavLink
+                  component={NavLink}
                   to={item.path}
                   onClick={isMobile ? handleToggle : undefined}
-                  style={({ isActive }) => ({
-                    backgroundColor: isActive ? theme.palette.action.selected : 'transparent', // Highlight active item
-                  })} // Active style
+                  sx={({ isActive }) => ({
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: '12px',
+                    backgroundColor: isActive 
+                      ? 'linear-gradient(135deg, #1976d2, #42a5f5)' 
+                      : 'transparent',
+                    color: isActive ? 'white' : 'inherit',
+                    '&:hover': {
+                      backgroundColor: isActive 
+                        ? 'linear-gradient(135deg, #1565c0, #1976d2)' 
+                        : 'rgba(25, 118, 210, 0.08)',
+                      transform: 'translateX(4px)',
+                    },
+                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                    '& .MuiListItemIcon-root': {
+                      color: isActive ? 'white' : theme.palette.text.secondary,
+                      transition: 'color 0.3s ease',
+                    },
+                    '& .MuiListItemText-primary': {
+                      fontWeight: isActive ? 600 : 500,
+                      transition: 'all 0.3s ease',
+                    },
+                  })}
                 >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.text} />
+                  <ListItemIcon sx={{ minWidth: 40 }}>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary={item.text} 
+                    sx={{
+                      '& .MuiListItemText-primary': {
+                        fontSize: '0.9rem',
+                      }
+                    }}
+                  />
                 </ListItem>
               ))}
-              <Divider />
+              <Divider sx={{ my: 1, mx: 2, opacity: 0.3 }} />
             </Box>
           ))}
-          {/* Outlined Button for Guide/Documentation */}
-          <ListItem>
+          
+          {/* Enhanced Documentation Button */}
+          <ListItem sx={{ px: 2, py: 1 }}>
             <Button
-              component={NavLink} // Change to NavLink
-              to="#" // Update this path to your documentation or support page
-              variant="outlined" // Keeping it outlined as per your preference
+              component="a"
+              href="https://docs.phishintel.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="outlined"
+              startIcon={<HelpIcon />}
               sx={{
                 justifyContent: 'flex-start',
-                mt: 1,
-                color: theme.palette.text.primary, // Customize color as needed
-                textTransform: 'none', // Disable uppercase transformation
-                width: '100%', // Make it full width
-                padding: '12px', // Add some padding for a button-like feel
-                borderRadius: '8px',
-                borderColor: theme.palette.text.primary, // Ensures the border is visible
+                width: '100%',
+                py: 1.5,
+                px: 2,
+                color: theme.palette.primary.main,
+                borderColor: theme.palette.primary.main,
+                borderRadius: '12px',
+                textTransform: 'none',
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                backgroundColor: 'rgba(25, 118, 210, 0.04)',
                 '&:hover': {
-                  backgroundColor: theme.palette.action.hover, // Optional: Add hover effect
+                  backgroundColor: 'rgba(25, 118, 210, 0.08)',
+                  borderColor: theme.palette.primary.dark,
+                  color: theme.palette.primary.dark,
+                  transform: 'translateY(-1px)',
+                  boxShadow: '0 4px 12px rgba(25, 118, 210, 0.15)',
                 },
+                transition: 'all 0.2s ease-in-out',
               }}
             >
-              Guide and Documentation
+              Documentation
             </Button>
           </ListItem>
         </List>
