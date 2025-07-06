@@ -160,12 +160,24 @@ const CampaignDetail = () => {
 
                     {/* Main Campaign Details Content */}
                     <Grid container spacing={2} sx={{ mb: 4 }} alignItems="center">
-                        <Grid item xs={10}>
-                            <Typography variant="h5" color="primary">
+                        <Grid item xs={12} md={8} sx={{ pl: 2, pb: 2 }}>
+                            <Typography 
+                                sx={{ 
+                                    mb: 1, 
+                                    fontWeight: 500,
+                                    background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
+                                    backgroundClip: 'text',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    fontSize: { xs: '1.2rem', md: '1.8rem' }
+                                }} 
+                                variant="h4" 
+                                color="primary"
+                            >
                                 Campaign Details
                             </Typography>
                             <Typography sx={{ fontSize: 13 }} color="text.secondary">
-                                View the details of your selected campaign, including the audience, sender profile, and email template used.
+                                View and manage your campaign details, track progress, and analyze results.
                             </Typography>
                         </Grid>
 

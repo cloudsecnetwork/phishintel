@@ -258,7 +258,19 @@ const AudienceDetail = () => {
                 <Container maxWidth="lg" sx={{ flexGrow: 1, mt: '96px', mb: 2 }}>
                     <Grid container spacing={2} sx={{ mb: 2 }}>
                         <Grid item xs={12} md={8} sx={{ pl: 2, pb: 2 }}>
-                            <Typography variant="h5" color="primary">
+                            <Typography 
+                                sx={{ 
+                                    mb: 1, 
+                                    fontWeight: 500,
+                                    background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
+                                    backgroundClip: 'text',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    fontSize: { xs: '1.2rem', md: '1.8rem' }
+                                }} 
+                                variant="h4" 
+                                color="primary"
+                            >
                                 Audience Details
                             </Typography>
                             <Typography sx={{ fontSize: 13 }} color="text.secondary">
