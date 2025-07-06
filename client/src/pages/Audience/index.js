@@ -5,6 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Sidebar from '../../components/Sidebar';
 import Footer from '../../components/Footer';
 import { useAudience } from '../../hooks/useAudience';
+import { formatCardDate } from '../../utils/dateUtils';
 
 const Audience = () => {
     const navigate = useNavigate();
@@ -95,15 +96,16 @@ const Audience = () => {
                                                         textOverflow: 'ellipsis',   // Show ellipsis for truncated text
                                                         maxWidth: '100%',           // Ensure it fits within the container
                                                         display: 'block',           // Enforce block-level behavior for truncation
+                                                        fontWeight: 500,            // Medium weight
+                                                        color: '#1a1a1a',           // Dark gray (less harsh than pure black)
                                                     }}
                                                     variant="h6"
-                                                    color="text.secondary"
                                                     component="div"
                                                 >
                                                     {audience.name}
                                                 </Typography>
                                                 <Typography sx={{ mb: 1.5 }} variant="subtitle2" color="text.secondary">
-                                                    Created on: {new Date(audience.createdAt).toLocaleDateString()}
+                                                    Created {formatCardDate(audience.createdAt)}
                                                 </Typography>
                                             </Box>
                                             <Box sx={{ textAlign: 'right', ml: 2 }}>  {/* Ensure spacing between name and contacts */}
