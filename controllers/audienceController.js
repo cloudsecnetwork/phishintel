@@ -219,12 +219,24 @@ export const addContactToAudience = async (req, res) => {
             });
         }
 
-        // Find the audience by ID
-        const audience = await Audience.findById(id);
+        // Find the audience by ID and populate contacts
+        const audience = await Audience.findById(id).populate('contacts');
         if (!audience) {
             return res.status(404).json({
                 success: false,
                 message: 'Audience not found'
+            });
+        }
+
+        // Check if email already exists in this audience
+        const emailExists = audience.contacts.some(contact => 
+            contact.email.toLowerCase() === email.toLowerCase()
+        );
+
+        if (emailExists) {
+            return res.status(400).json({
+                success: false,
+                message: 'A contact with this email already exists in this audience'
             });
         }
 

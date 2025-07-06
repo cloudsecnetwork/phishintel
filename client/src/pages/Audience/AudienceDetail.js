@@ -109,6 +109,15 @@ const AudienceDetail = () => {
             errors.email = 'Email is required';
         } else if (!validateEmail(newContact.email)) {
             errors.email = 'Please enter a valid email address';
+        } else {
+            // Check if email already exists in current audience
+            const emailExists = contacts.some(contact => 
+                contact.email.toLowerCase() === newContact.email.toLowerCase()
+            );
+            
+            if (emailExists) {
+                errors.email = 'A contact with this email already exists in this audience';
+            }
         }
         
         setFormErrors(errors);

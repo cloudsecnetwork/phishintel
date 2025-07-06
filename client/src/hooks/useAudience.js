@@ -109,8 +109,10 @@ export const useAudience = () => {
                 return { success: false, message: response.data.message };
             }
         } catch (error) {
-            setError(error.message);
-            return { success: false, message: error.message };
+            // Handle axios error response properly
+            const errorMessage = error.response?.data?.message || error.message;
+            setError(errorMessage);
+            return { success: false, message: errorMessage };
         } finally {
             setLoading(false);
         }
