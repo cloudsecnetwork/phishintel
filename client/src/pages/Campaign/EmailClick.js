@@ -6,6 +6,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { DataGrid } from '@mui/x-data-grid';
 import useEmailClicks from '../../hooks/useEmailClicks';
 import { useExport } from '../../hooks/useExport';
+import { formatDataGridDate } from '../../utils/dateUtils';
 
 const EmailClick = () => {
     const { id: campaignId } = useParams();  // Get the campaign ID from the URL params
@@ -32,7 +33,12 @@ const EmailClick = () => {
         { field: 'ipAddress', headerName: 'IP Address', flex: 0.3 },
         { field: 'device', headerName: 'Device', flex: 0.5 },
         { field: 'count', headerName: 'Count', flex: 0.1 },
-        { field: 'createdAt', headerName: 'Date/Time', flex: 0.3 },
+        { 
+            field: 'createdAt', 
+            headerName: 'Date/Time', 
+            flex: 0.3,
+            valueGetter: (params) => formatDataGridDate(params.value)
+        },
         {
             field: 'actions',
             headerName: 'Action',

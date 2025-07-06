@@ -5,6 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Sidebar from '../../components/Sidebar';
 import Footer from '../../components/Footer';
 import { useGetAllCampaigns } from '../../hooks/useCampaign';
+import { formatCardDate } from '../../utils/dateUtils';
 
 const Campaign = () => {
     const navigate = useNavigate();
@@ -97,12 +98,14 @@ const Campaign = () => {
                                                     textOverflow: 'ellipsis',
                                                     maxWidth: '100%',
                                                     display: 'block',
+                                                    fontWeight: 500,            // Medium weight
+                                                    color: '#1a1a1a',           // Dark gray (less harsh than pure black)
                                                 }}
-                                                variant="h6" component="div" color="text.secondary">
+                                                variant="h6" component="div">
                                                 {campaign.name}
                                             </Typography>
                                             <Typography sx={{ mb: 1.5 }} variant="subtitle2" color="text.secondary">
-                                                Created on: {new Date(campaign.createdAt).toLocaleDateString()}
+                                                Created {formatCardDate(campaign.createdAt)}
                                             </Typography>
                                             <Chip
                                                 label={campaign.status}

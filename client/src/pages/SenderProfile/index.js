@@ -7,6 +7,7 @@ import Footer from '../../components/Footer';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useSenderProfiles } from '../../hooks/useSenderProfiles';
 import { useNavigate } from 'react-router-dom';
+import { formatDataGridDate } from '../../utils/dateUtils';
 
 const SenderProfile = () => {
     const navigate = useNavigate();
@@ -38,7 +39,14 @@ const SenderProfile = () => {
                     color={params.value ? "success" : "warning"} // Use success for true and warning for false
                 />
             ),
-        }, {
+        },
+        { 
+            field: 'createdAt', 
+            headerName: 'Created', 
+            flex: 0.8,
+            valueGetter: (params) => formatDataGridDate(params.value)
+        },
+        {
             field: 'actions',
             headerName: 'Action',
             flex: 0.5,

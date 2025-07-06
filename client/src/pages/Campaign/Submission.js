@@ -6,6 +6,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import useSubmissions from '../../hooks/useSubmissions';
 import { useExport } from '../../hooks/useExport';
 import { useParams } from 'react-router-dom';
+import { formatDataGridDate } from '../../utils/dateUtils';
 
 const Submission = () => {
     const { id: campaignId } = useParams(); // Get the campaign ID from the URL params
@@ -31,7 +32,12 @@ const Submission = () => {
         { field: 'email', headerName: 'Email', flex: 0.4 },
         { field: 'ipAddress', headerName: 'IP Address', flex: 0.3 },
         { field: 'device', headerName: 'Device', flex: 0.5 },
-        { field: 'createdAt', headerName: 'Date/Time', flex: 0.3 },
+        { 
+            field: 'createdAt', 
+            headerName: 'Date/Time', 
+            flex: 0.3,
+            valueGetter: (params) => formatDataGridDate(params.value)
+        },
         {
             field: 'actions',
             headerName: 'Action',
