@@ -118,11 +118,6 @@ export const useAudience = () => {
         }
     };
 
-    const enableAIContext = async (audienceId, file) => {
-        // Placeholder API call
-        console.log(`Enabling AI Context for audience ID: ${audienceId}`, file);
-    };
-
     const deleteContact = async (audienceId, contactId) => {
         setLoading(true);
         try {
@@ -176,5 +171,5 @@ export const useAudience = () => {
         }
     };
 
-    return { audiences, audienceDetail, createAudience, fetchAudienceDetail, deleteAudience, addContact, enableAIContext, deleteContact, uploadCSVToAudience, loading, error };
+    return { audiences, audienceDetail, createAudience, fetchAudienceDetail, deleteAudience, addContact, deleteContact, uploadCSVToAudience, loading, error };
 };

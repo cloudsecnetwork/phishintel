@@ -7,10 +7,6 @@ const audienceSchema = new Schema({
         required: true,
         trim: true,
     },
-    AIContextEnabled: {
-        type: Boolean,
-        default: false,
-    },
     contacts: [{
         type: Schema.Types.ObjectId,
         ref: 'Contact'

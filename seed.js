@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import Audience from './models/Audience.js';
 import Contact from './models/Contact.js';
-import Context from './models/Context.js';
 
 // Load environment variables (if needed)
 dotenv.config();
@@ -80,49 +79,9 @@ const seedDatabase = async () => {
         // Create an audience referencing the contacts
         const audience = await Audience.create({
             name: 'CSN Employees',
-            AIContextEnabled: true,
             contacts: createdContacts.map((contact) => contact._id),
         });
         console.log('Audience created:', audience);
-
-        // Define aligned email subjects and project titles
-        const alignedContexts = [
-            {
-                emailSubject: "Quarterly Performance Review",
-                project: "Redesign Corporate Website",
-            },
-            {
-                emailSubject: "Upcoming Product Launch",
-                project: "Develop Mobile App",
-            },
-            {
-                emailSubject: "Team Building Activity",
-                project: "Plan Annual Retreat",
-            },
-            {
-                emailSubject: "Company Policy Updates",
-                project: "Revise Employee Handbook",
-            },
-            {
-                emailSubject: "Client Follow-Up Reminder",
-                project: "Prepare Proposal for Key Client",
-            },
-        ];
-
-        // Create context for each contact
-        const contexts = createdContacts.map((contact, index) => {
-            const alignedData = alignedContexts[index % alignedContexts.length]; // Cycle through aligned contexts
-            return {
-                contact: contact._id,
-                data: {
-                    lastEmailSent: alignedData.emailSubject, // Unique email subject
-                    currentProject: alignedData.project, // Unique project title
-                },
-            };
-        });
-
-        const createdContexts = await Context.insertMany(contexts);
-        console.log('Contexts created:', createdContexts);
 
         console.log('Database seeding completed.');
     } catch (error) {
