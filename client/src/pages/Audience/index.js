@@ -45,7 +45,7 @@ const Audience = () => {
                                 Manage your contacts and target audience for phishing campaigns.
                             </Typography>
                         </Grid>
-                        <Grid sx={{ p: 2 }} xs={12} md={4} lg={4}>
+                        <Grid sx={{ p: 2, pr: 0.5 }} xs={12} md={4} lg={4}>
                             <Grid container justifyContent="flex-end">
                                 <Button
                                     variant="contained"
@@ -64,16 +64,43 @@ const Audience = () => {
                         {/* Show loading message if loading */}
                         {loading && (
                             <Grid item xs={12}>
-                                <Typography variant="h6" align="center" color='text.secondary'>
-                                    Loading...
-                                </Typography>
+                                <Box sx={{ 
+                                    display: 'flex', 
+                                    justifyContent: 'center', 
+                                    alignItems: 'center',
+                                    py: 6
+                                }}>
+                                    <Typography 
+                                        variant="h6" 
+                                        align="center" 
+                                        color='text.secondary'
+                                        sx={{ 
+                                            fontWeight: 500,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: 1
+                                        }}
+                                    >
+                                        Loading audiences...
+                                    </Typography>
+                                </Box>
                             </Grid>
                         )}
 
                         {/* Show error message if error */}
                         {error && (
                             <Grid item xs={12}>
-                                <Alert severity="warning" variant="outlined">
+                                <Alert 
+                                    severity="warning" 
+                                    variant="outlined"
+                                    sx={{ 
+                                        borderRadius: '8px',
+                                        borderWidth: '1px',
+                                        '& .MuiAlert-icon': {
+                                            fontSize: '1.25rem'
+                                        }
+                                    }}
+                                >
                                     {error}
                                 </Alert>
                             </Grid>
@@ -81,9 +108,28 @@ const Audience = () => {
 
                         {!loading && !error && audiences.length === 0 && (
                             <Grid item xs={12}>
-                                <Alert severity="info" variant="outlined" sx={{ mt: 2 }}>
-                                    No audiences have been created yet. Click "Create Audience" to get started.
-                                </Alert>
+                                <Box sx={{ 
+                                    display: 'flex', 
+                                    justifyContent: 'center', 
+                                    alignItems: 'center',
+                                    py: 6
+                                }}>
+                                    <Alert 
+                                        severity="info" 
+                                        variant="outlined" 
+                                        sx={{ 
+                                            borderRadius: '8px',
+                                            borderWidth: '1px',
+                                            maxWidth: '500px',
+                                            textAlign: 'center',
+                                            '& .MuiAlert-icon': {
+                                                fontSize: '1.25rem'
+                                            }
+                                        }}
+                                    >
+                                        No audiences have been created yet. Click "Create Audience" to get started.
+                                    </Alert>
+                                </Box>
                             </Grid>
                         )}
 

@@ -9,12 +9,7 @@ import {
     CardContent,
     Divider,
     Button,
-    Dialog,
-    DialogTitle,
-    DialogActions,
-    DialogContent,
     Alert,
-    DialogContentText,
     Snackbar,
     IconButton,
     Menu,
@@ -292,35 +287,86 @@ const AudienceDetail = () => {
 
                     {/* Error Handling */}
                     {error && (
-                        <Typography color="error" sx={{ mb: 2 }}>
+                        <Alert 
+                            severity="error" 
+                            variant="outlined"
+                            sx={{ 
+                                mb: 3,
+                                borderRadius: '8px',
+                                borderWidth: '1px',
+                                '& .MuiAlert-icon': {
+                                    fontSize: '1.25rem'
+                                }
+                            }}
+                        >
                             {error}
-                        </Typography>
+                        </Alert>
                     )}
 
-                    <Card sx={{ backgroundColor: "#ffffff", borderRadius: 2 }}>
-                        <CardContent>
-                            <Grid container spacing={3}>
+                    <Card sx={{ 
+                        backgroundColor: "#ffffff", 
+                        borderRadius: '16px',
+                        border: '1px solid rgba(0, 0, 0, 0.08)',
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+                        transition: 'all 0.2s ease-in-out',
+                        '&:hover': {
+                            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)'
+                        }
+                    }}>
+                        <CardContent sx={{ p: 3 }}>
+                            <Grid container spacing={4}>
                                 <Grid item xs={12} md={6}>
                                     <Grid container spacing={2} alignItems="center">
                                         <Grid item>
-                                            <Group color="primary" />
+                                            <Box sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                width: '48px',
+                                                height: '48px',
+                                                borderRadius: '12px',
+                                                backgroundColor: 'primary.main',
+                                                color: 'white'
+                                            }}>
+                                                <Group sx={{ fontSize: '1.5rem' }} />
+                                            </Box>
                                         </Grid>
                                         <Grid sx={{ maxWidth: '85%' }} item>
-                                            <Typography variant="subtitle1" color="text.secondary">
+                                            <Typography 
+                                                variant="subtitle2" 
+                                                color="text.secondary"
+                                                sx={{ 
+                                                    fontWeight: 500,
+                                                    textTransform: 'uppercase',
+                                                    letterSpacing: '0.5px',
+                                                    fontSize: '0.75rem',
+                                                    mb: 0.5
+                                                }}
+                                            >
                                                 Audience Name
                                             </Typography>
                                             <Typography
                                                 variant="h6"
                                                 sx={{
-                                                    fontWeight: 500,
-                                                    whiteSpace: 'nowrap',       // Prevent wrapping
-                                                    overflow: 'hidden',         // Clip overflowing text
-                                                    textOverflow: 'ellipsis',   // Add ellipsis for truncated text
-                                                    maxWidth: '100%',           // Ensure it fits within the container
-                                                    display: 'block',           // Enforce block-level behavior
+                                                    fontWeight: 600,
+                                                    whiteSpace: 'nowrap',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    maxWidth: '100%',
+                                                    display: 'block',
+                                                    color: '#1a1a1a',
+                                                    fontSize: '1.25rem'
                                                 }}
                                             >
-                                                {loading ? 'Loading...' : audienceDetail?.name || 'N/A'}
+                                                {loading ? (
+                                                    <Box component="span" sx={{ 
+                                                        color: 'text.secondary',
+                                                        fontWeight: 400,
+                                                        fontSize: '0.875rem'
+                                                    }}>
+                                                        Loading audience...
+                                                    </Box>
+                                                ) : audienceDetail?.name || 'N/A'}
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -329,14 +375,50 @@ const AudienceDetail = () => {
                                 <Grid item xs={12} md={6}>
                                     <Grid container spacing={2} alignItems="center">
                                         <Grid item>
-                                            <Person color="primary" />
+                                            <Box sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                width: '48px',
+                                                height: '48px',
+                                                borderRadius: '12px',
+                                                backgroundColor: 'primary.main',
+                                                color: 'white'
+                                            }}>
+                                                <Person sx={{ fontSize: '1.5rem' }} />
+                                            </Box>
                                         </Grid>
                                         <Grid item>
-                                            <Typography variant="subtitle1" color="text.secondary">
+                                            <Typography 
+                                                variant="subtitle2" 
+                                                color="text.secondary"
+                                                sx={{ 
+                                                    fontWeight: 500,
+                                                    textTransform: 'uppercase',
+                                                    letterSpacing: '0.5px',
+                                                    fontSize: '0.75rem',
+                                                    mb: 0.5
+                                                }}
+                                            >
                                                 Unique Contacts
                                             </Typography>
-                                            <Typography variant="h6" sx={{ fontWeight: 500 }}>
-                                                {loading ? 'Loading...' : audienceDetail?.contactCount || 0}
+                                            <Typography 
+                                                variant="h6" 
+                                                sx={{ 
+                                                    fontWeight: 700,
+                                                    color: 'primary.main',
+                                                    fontSize: '1.5rem'
+                                                }}
+                                            >
+                                                {loading ? (
+                                                    <Box component="span" sx={{ 
+                                                        color: 'text.secondary',
+                                                        fontWeight: 400,
+                                                        fontSize: '0.875rem'
+                                                    }}>
+                                                        Loading...
+                                                    </Box>
+                                                ) : audienceDetail?.contactCount || 0}
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -348,10 +430,27 @@ const AudienceDetail = () => {
 
                     <Divider sx={{ my: 3 }} />
 
-                    <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+                    <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
                         <Grid item>
-                            <Typography color='primary' variant="h6">Contact List</Typography>
-                            <Typography sx={{ fontSize: 13 }} color="text.secondary">
+                            <Typography 
+                                color='primary' 
+                                variant="h6"
+                                sx={{ 
+                                    fontWeight: 600,
+                                    fontSize: '1.25rem',
+                                    mb: 0.5
+                                }}
+                            >
+                                Contact List
+                            </Typography>
+                            <Typography 
+                                sx={{ 
+                                    fontSize: '0.875rem',
+                                    color: 'text.secondary',
+                                    lineHeight: 1.4
+                                }} 
+                                color="text.secondary"
+                            >
                                 View and manage contacts associated with this audience.
                             </Typography>
                         </Grid>
@@ -361,6 +460,19 @@ const AudienceDetail = () => {
                                 color="primary"
                                 startIcon={<Add />}
                                 onClick={() => setOpenAddDialog(true)}
+                                sx={{
+                                    borderRadius: '8px',
+                                    textTransform: 'none',
+                                    fontWeight: 500,
+                                    px: 2.5,
+                                    py: 1,
+                                    borderWidth: '1.5px',
+                                    '&:hover': {
+                                        borderWidth: '2px',
+                                        transform: 'translateY(-1px)'
+                                    },
+                                    transition: 'all 0.2s ease-in-out'
+                                }}
                             >
                                 Add Contact
                             </Button>
