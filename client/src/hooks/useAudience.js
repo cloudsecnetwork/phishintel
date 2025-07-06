@@ -147,5 +147,34 @@ export const useAudience = () => {
         }
     };
 
-    return { audiences, audienceDetail, createAudience, fetchAudienceDetail, deleteAudience, addContact, enableAIContext, deleteContact, loading, error };
+    const uploadCSVToAudience = async (audienceId, file) => {
+        setLoading(true);
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await axiosInstance.post(`/api/audience/${audienceId}/upload-csv`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            if (response.data.success) {
+                // Refresh audience details to get updated contact list
+                await fetchAudienceDetail(audienceId);
+                return { success: true, data: response.data.data, message: response.data.message };
+            } else {
+                setError(response.data.message);
+                return { success: false, message: response.data.message };
+            }
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || error.message;
+            setError(errorMessage);
+            return { success: false, message: errorMessage };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return { audiences, audienceDetail, createAudience, fetchAudienceDetail, deleteAudience, addContact, enableAIContext, deleteContact, uploadCSVToAudience, loading, error };
 };
