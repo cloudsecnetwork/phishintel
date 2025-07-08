@@ -63,6 +63,9 @@ From the root project directory:
 # Install backend dependencies
 npm install
 
+# After starting MongoDB, initialize the root admin (first time only):
+node initRootAdmin.js
+
 # Start backend with auto-reload
 nodemon app.js
 ```
@@ -111,7 +114,7 @@ docker-compose up
 
 Start MongoDB (with data persisted in a Docker volume):
 ```bash
-docker run -d --name phishintel-mongodb -v phishintel_mongo_data:/data/db -p 27017:27017 mongo:8.0
+docker run -d --name mongodb -p 27017:27017 mongo:8.0
 ```
 
 Start the PhishIntel app (connects to the running MongoDB):
@@ -123,7 +126,7 @@ docker run --name phishintel \
   -e SESSION_SECRET=your-session-secret \
   -e PORT=8080 \
   -p 8080:8080 \
-  phishintel-app
+  cloudsecnetwork/phishintel:latest
 ```
 
 - Data is persisted in the `phishintel_mongo_data` Docker volume (same as compose).
@@ -155,28 +158,6 @@ PhishIntel relies on several environment variables for proper configuration. The
 | `PORT`           | The port the backend server listens on. Defaults to `8080`. You can change this if needed. |
 
 > ⚠️ For production deployments, avoid hardcoding sensitive credentials in configuration files. Use environment injection tools, secret managers, or CI/CD pipeline variables for security.
-
-## Initial Root Admin Setup
-
-When you first deploy PhishIntel, the application requires a root admin user. This user is created by running the `initRootAdmin.js` script, which uses the `ADMIN_PASSWORD` environment variable to set the initial password. This process only happens once—if a root admin already exists, the script will not create a new one.
-
-**To initialize the root admin:**
-
-```bash
-# Ensure your .env file contains ADMIN_PASSWORD
-node initRootAdmin.js
-```
-
-- The root admin will have:
-  - Username: `admin`
-  - First Name: `Administrator`
-  - Last Name: (blank)
-  - Email: `admin@localhost`
-  - Role: `admin`
-  - isRoot: `true`
-- After setup, you can log in as the root admin and change the password from within the application. You do **not** need to update the environment variable again.
-
-> **Note:** The `ADMIN_PASSWORD` environment variable is only used for this initial setup. For security, you may remove or rotate it after the root admin is created.
 
 ## Getting Help
 

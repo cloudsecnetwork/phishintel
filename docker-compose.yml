@@ -12,7 +12,7 @@ services:
       driver: "none"
 
   phishintel:
-    image: phishintel-app
+    image: cloudsecnetwork/phishintel:latest
     container_name: phishintel
     depends_on:
       - mongodb

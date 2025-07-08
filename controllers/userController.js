@@ -62,11 +62,14 @@ export async function updateUser(req, res) {
   }
 }
 
-// Delete user (admin or self only)
+// Delete user (admin only, cannot delete self)
 export async function deleteUser(req, res) {
   try {
-    if (!req.user || (req.user._id !== req.params.id && req.user.role !== 'admin')) {
+    if (!req.user || req.user.role !== 'admin') {
       return res.status(403).json({ success: false, error: 'Forbidden' });
+    }
+    if (req.user._id === req.params.id) {
+      return res.status(403).json({ success: false, error: 'Admins cannot delete themselves.' });
     }
     const user = await userService.deleteUser(req.params.id);
     if (!user) return res.status(404).json({ success: false, error: 'User not found' });
