@@ -268,30 +268,40 @@ const Sidebar = () => {
                   component={NavLink}
                   to={item.path}
                   onClick={isMobile ? handleToggle : undefined}
-                  sx={({ isActive }) => ({
+                  sx={{
                     mx: 1,
                     mb: 0.5,
                     borderRadius: '12px',
-                    backgroundColor: isActive 
-                      ? 'linear-gradient(135deg, #1976d2, #42a5f5)' 
-                      : 'transparent',
-                    color: isActive ? 'white' : 'inherit',
+                    backgroundColor: 'transparent',
+                    color: 'inherit',
                     '&:hover': {
-                      backgroundColor: isActive 
-                        ? 'linear-gradient(135deg, #1565c0, #1976d2)' 
-                        : 'rgba(25, 118, 210, 0.08)',
+                      backgroundColor: 'rgba(25, 118, 210, 0.08)',
                       transform: 'translateX(4px)',
                     },
                     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                     '& .MuiListItemIcon-root': {
-                      color: isActive ? 'white' : theme.palette.text.secondary,
+                      color: theme.palette.text.secondary,
                       transition: 'color 0.3s ease',
                     },
                     '& .MuiListItemText-primary': {
-                      fontWeight: isActive ? 600 : 500,
+                      fontWeight: 500,
                       transition: 'all 0.3s ease',
                     },
-                  })}
+                    '&.active': {
+                      backgroundColor: '#1976d2',
+                      color: 'white',
+                      '&:hover': {
+                        backgroundColor: '#1565c0',
+                      },
+                      '& .MuiListItemIcon-root': {
+                        color: 'white',
+                      },
+                      '& .MuiListItemText-primary': {
+                        fontWeight: 600,
+                        color: 'white',
+                      },
+                    },
+                  }}
                 >
                   <ListItemIcon sx={{ minWidth: 40 }}>
                     {item.icon}

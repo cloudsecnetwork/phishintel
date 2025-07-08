@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Box, Typography, Container, TextField, Button, Grid, FormControlLabel, Checkbox, CircularProgress, Alert } from '@mui/material';
+import { Box, Typography, Container, TextField, Button, Grid, FormControlLabel, Checkbox, CircularProgress, Alert, IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Sidebar from '../../components/Sidebar';
 import Footer from '../../components/Footer';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +15,7 @@ const CreateSenderProfile = () => {
     const [host, setHost] = useState('');
     const [port, setPort] = useState('');
     const [secure, setSecure] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -53,7 +55,7 @@ const CreateSenderProfile = () => {
                                     backgroundClip: 'text',
                                     WebkitBackgroundClip: 'text',
                                     WebkitTextFillColor: 'transparent',
-                                    fontSize: { xs: '1.2rem', md: '1.8rem' }
+                                    fontSize: { xs: '1rem', md: '1.5rem' }
                                 }} 
                                 variant="h4" 
                                 color="primary"
@@ -147,8 +149,21 @@ const CreateSenderProfile = () => {
                                     variant="outlined"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    type="password"
+                                    type={showPassword ? 'text' : 'password'}
                                     helperText="This field may be left blank if authentication is not required."
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    edge="end"
+                                                    size="small"
+                                                >
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                 />
                             </Grid>
 
