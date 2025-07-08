@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:8.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - phishintel_mongo_data:/data/db
+    logging:
+      driver: "none"
+
+  phishintel:
+    image: cloudsecnetwork/phishintel:latest
+    container_name: phishintel
+    depends_on:
+      - mongodb
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: "mongodb://mongodb:27017/phishintel"
+      ADMIN_PASSWORD: "admin123"         # <-- Change this to your desired admin password
+      SESSION_SECRET: "supersecretkey"   # <-- Change this to a secure random string
+      NODE_ENV: "development"
+      PORT: 8080
+
+volumes:
+  phishintel_mongo_data: 

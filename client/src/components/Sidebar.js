@@ -28,9 +28,14 @@ import {
   Info as InfoIcon,
   Help as HelpIcon,
 } from '@mui/icons-material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Avatar from '@mui/material/Avatar';
+import Menu from '@mui/material/Menu';
 import { useTheme } from '@mui/material/styles';
 import { NavLink } from 'react-router-dom';
 import { getVersionInfo } from '../services/versionService';
+import { jwtDecode } from 'jwt-decode';
+import { getToken, clearToken } from '../utils/tokenManager';
 
 const Sidebar = () => {
   const theme = useTheme();
@@ -42,9 +47,16 @@ const Sidebar = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('EN');
   const [version, setVersion] = useState('0.1.0');
   const [releaseDate, setReleaseDate] = useState(null);
+  const [user, setUser] = useState(null);
+  const [profileMenuAnchor, setProfileMenuAnchor] = useState(null);
+
+  const handleToggle = () => {
+    setOpen(!open);
+  }
 
   // Fetch version info on component mount
   useEffect(() => {
+    // Fetch version info
     const fetchVersionInfo = async () => {
       try {
         const versionInfo = await getVersionInfo();
@@ -54,28 +66,30 @@ const Sidebar = () => {
         console.error('Failed to fetch version info:', error);
       }
     };
-
     fetchVersionInfo();
+    // Decode user info from JWT
+    const token = getToken();
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setUser(decoded);
+      } catch (e) {
+        setUser(null);
+      }
+    }
   }, []);
 
-  // Info Popover functions
-  const handlePopoverOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-    setIsPopoverOpen(true);
+  // Profile menu handlers
+  const handleProfileMenuOpen = (event) => {
+    setProfileMenuAnchor(event.currentTarget);
   };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-    setIsPopoverOpen(false);
+  const handleProfileMenuClose = () => {
+    setProfileMenuAnchor(null);
   };
-
-  // Language selection functions
-  const handleLanguageChange = (event) => {
-    setSelectedLanguage(event.target.value);
-  };
-
-  const handleToggle = () => {
-    setOpen(!open);
+  const handleLogout = () => {
+    clearToken();
+    handleProfileMenuClose();
+    window.location.href = '/console';
   };
 
   // Grouped menu items with enhanced structure
@@ -102,9 +116,7 @@ const Sidebar = () => {
       {/* Simple AppBar */}
       <AppBar 
         position="fixed" 
-        sx={{ 
-          zIndex: theme.zIndex.drawer + 1,
-        }}
+        sx={{ zIndex: theme.zIndex.drawer + 1 }}
       >
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           {isMobile && (
@@ -125,96 +137,79 @@ const Sidebar = () => {
               <MenuIcon />
             </IconButton>
           )}
-          
           <Typography 
             variant="h6" 
             noWrap 
             component="div" 
-            sx={{ 
-              flexGrow: isMobile ? 1 : 0, 
-              fontWeight: 600,
-            }}
+            sx={{ flexGrow: isMobile ? 1 : 0, fontWeight: 600 }}
           >
             PhishIntel
           </Typography>
-
+          {/* Modernized Profile Avatar & Menu */}
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton 
-              size='large' 
-              color="inherit" 
-              onClick={handlePopoverOpen}
-              sx={{
-                '&:hover': {
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                  transform: 'scale(1.05)',
-                },
-                transition: 'all 0.2s ease',
-              }}
+            <IconButton
+              size="large"
+              color="inherit"
+              onClick={handleProfileMenuOpen}
+              sx={{ p: 0, ml: 2, borderRadius: '50%' }}
             >
-              <InfoIcon />
+              <Box sx={{
+                bgcolor: 'primary.main',
+                borderRadius: '50%',
+                width: 36,
+                height: 36,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                <AccountCircleIcon sx={{ color: '#fff', width: 32, height: 32 }} />
+              </Box>
             </IconButton>
-            
-            <FormControl variant="outlined" size="small">
-              <Select
-                labelId="language-select-label"
-                value={selectedLanguage}
-                onChange={handleLanguageChange}
-                sx={{
-                  color: 'white',
-                  border: '1px solid white',
-                  '& .MuiSelect-icon': {
-                    color: 'white',
-                  },
-                  '&:focus': {
-                    outline: 'none',
-                    border: '0px',
-                  },
-                  '&:hover': {
-                    border: '0px',
-                  },
-                  '&.Mui-focused': {
-                    border: '0px',
-                    outline: 'none',
-                  },
-                }}
-              >
-                <MenuItem value="EN">EN</MenuItem>
-                <MenuItem value="FR">FR</MenuItem>
-              </Select>
-            </FormControl>
-            
-            <Popover
-              open={isPopoverOpen}
-              anchorEl={anchorEl}
-              onClose={handlePopoverClose}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
+            <Menu
+              anchorEl={profileMenuAnchor}
+              open={Boolean(profileMenuAnchor)}
+              onClose={handleProfileMenuClose}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
               PaperProps={{
                 sx: {
-                  borderRadius: '12px',
+                  borderRadius: '16px',
                   boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
-                  border: '1px solid rgba(0,0,0,0.08)',
+                  minWidth: 260,
+                  p: 1,
                 }
               }}
             >
-              <Box sx={{ p: 2, minWidth: '200px' }}>
-                <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>
+              <Box sx={{ px: 2, py: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Avatar sx={{ bgcolor: 'primary.main', color: '#fff', width: 40, height: 40, fontWeight: 700, fontSize: 22, border: '2.5px solid #fff', boxSizing: 'border-box' }}>
+                  {user?.firstName ? user.firstName[0].toUpperCase() : (user?.username ? user.username[0].toUpperCase() : <AccountCircleIcon sx={{ width: 32, height: 32 }} />)}
+                </Avatar>
+                <Box>
+                  <Typography variant="subtitle1" fontWeight={600} noWrap>
+                    {user?.firstName || 'User'}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" noWrap>
+                    {user?.email || user?.role || 'NA'}
+                  </Typography>
+                </Box>
+              </Box>
+              <Divider sx={{ my: 1 }} />
+              <Box sx={{ px: 2, py: 0.5 }}>
+                <Typography variant="caption" color="text.secondary">
                   Community Edition
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                <Typography variant="caption" color="text.secondary" display="block">
                   Release Date: {releaseDate || 'N/A'}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="caption" color="text.secondary" display="block">
                   Version: {version}
                 </Typography>
               </Box>
-            </Popover>
+              <Divider sx={{ my: 1 }} />
+              <MenuItem disabled>View Profile</MenuItem>
+              <MenuItem disabled>Update Password</MenuItem>
+              <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+            </Menu>
           </Box>
         </Toolbar>
       </AppBar>
@@ -320,40 +315,6 @@ const Sidebar = () => {
             </Box>
           ))}
           
-          {/* Enhanced Documentation Button */}
-          <ListItem sx={{ px: 2, py: 1 }}>
-            <Button
-              component="a"
-              href="https://docs.phishintel.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="outlined"
-              startIcon={<HelpIcon />}
-              sx={{
-                justifyContent: 'flex-start',
-                width: '100%',
-                py: 1.5,
-                px: 2,
-                color: theme.palette.primary.main,
-                borderColor: theme.palette.primary.main,
-                borderRadius: '12px',
-                textTransform: 'none',
-                fontSize: '0.875rem',
-                fontWeight: 500,
-                backgroundColor: 'rgba(25, 118, 210, 0.04)',
-                '&:hover': {
-                  backgroundColor: 'rgba(25, 118, 210, 0.08)',
-                  borderColor: theme.palette.primary.dark,
-                  color: theme.palette.primary.dark,
-                  transform: 'translateY(-1px)',
-                  boxShadow: '0 4px 12px rgba(25, 118, 210, 0.15)',
-                },
-                transition: 'all 0.2s ease-in-out',
-              }}
-            >
-              Documentation
-            </Button>
-          </ListItem>
         </List>
       </Drawer>
     </>
