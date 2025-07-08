@@ -10,6 +10,8 @@ import errorHandler from './middlewares/errorHandler.js';
 
 dotenv.config(); // Load environment variables
 
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+
 // Validate required environment variables
 const validateEnvVars = () => {
     const requiredEnvVars = ['NODE_ENV', 'DB_URL', 'ADMIN_PASSWORD', 'SESSION_SECRET'];
@@ -45,11 +47,6 @@ if (process.env.NODE_ENV === 'development') {
     logger.token("ip", (req) => req.ip);
     app.use(logger(":method :url :status :res[content-length] - :response-time ms :ip :body"));
 }
-
-// Health check route
-app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'ok', uptime: process.uptime() });
-});
 
 // API Routes
 app.use(routes);

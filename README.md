@@ -81,30 +81,66 @@ npm start
 - **Backend API**: http://localhost:8080  
 
 ## Docker Deployment
-You can run PhishIntel using the official Docker image:
+You can run PhishIntel using Docker in two ways. **Do not run both approaches at the same time to avoid container and port conflicts.**
+
+### 1. Using `docker-compose` (recommended for most users)
+
+- **Pros:** Easiest, manages both app and MongoDB, automatic data persistence via Docker volume, one-command startup and shutdown.
+- **Cons:** Slightly more setup if you want to customize ports or container names.
+
+To start both the app and MongoDB:
 
 ```bash
-docker pull cloudsecnetwork/phishintel:latest
+docker-compose up
 ```
-Then start the container with the necessary environment variables:
+
+- MongoDB data is persisted in the `phishintel_mongo_data` Docker volume.
+- To stop and remove containers (but keep data):
+  ```bash
+  docker-compose down
+  ```
+- To stop and remove containers **and** delete all MongoDB data:
+  ```bash
+  docker-compose down -v
+  ```
+
+### 2. Using `docker run` (manual, advanced)
+
+- **Pros:** More control, can run app or DB separately, useful for advanced scenarios.
+- **Cons:** You must manage MongoDB and data persistence yourself.
+
+Start MongoDB (with data persisted in a Docker volume):
 ```bash
-docker run -e NODE_ENV=production \
-           -e DB_URL="mongodb+srv://<username>:<password>@cluster0.mongodb.net/phishintel" \
-           -e ADMIN_PASSWORD=YourSecurePassword \
-           -e SESSION_SECRET=de0b1b13-5e94-4daa-900e-5b4ec8a4fd7d \
-           -p 8080:8080 cloudsecnetwork/phishintel:latest
+docker run -d --name phishintel-mongodb -v phishintel_mongo_data:/data/db -p 27017:27017 mongo:8.0
 ```
 
-### Notes
+Start the PhishIntel app (connects to the running MongoDB):
+```bash
+docker run --name phishintel \
+  -e NODE_ENV=development \
+  -e DB_URL="mongodb://host.docker.internal:27017/phishintel" \
+  -e ADMIN_PASSWORD=YourSecurePassword \
+  -e SESSION_SECRET=your-session-secret \
+  -e PORT=8080 \
+  -p 8080:8080 \
+  phishintel-app
+```
 
-- The `DB_URL` provided above uses **MongoDB Atlas**, a fully managed cloud database service. The `+srv` format allows the driver to automatically resolve the cluster nodes.
-- You may use **any MongoDB instance** whether locally hosted, on a private server, or any cloud provider, as long as it is network accessible by the container.
-- Replace `<username>` and `<password>` in the example with your actual MongoDB credentials.
-- If you're using MongoDB Atlas, make sure to whitelist your host IP address under **Network Access** settings in the Atlas dashboard.
-- To access the application after the container starts, open:  
-  `http://<your-server-domain-or-public-ip>:8080/console`  
-  > ℹ️ The `:8080` is required if you're accessing the container directly, as the app runs on port 8080 by default.  
-  > If you're using a reverse proxy (e.g., NGINX, Load Balancer) that maps port 8080 to a standard port like 80 or 443, you can omit the port and access it via your domain as usual.
+- Data is persisted in the `phishintel_mongo_data` Docker volume (same as compose).
+- To stop and remove containers (but keep data):
+  ```bash
+  docker stop phishintel phishintel-mongodb
+  docker rm phishintel phishintel-mongodb
+  ```
+- To remove the data volume (danger: deletes all MongoDB data):
+  ```bash
+  docker volume rm phishintel_mongo_data
+  ```
+
+### **Important: Avoid Conflicts**
+- Do **not** run both approaches at the same time. Both use the same container names and host ports.
+- Use `docker ps` to see running containers.
+- Use `docker-compose down` or `docker stop`/`docker rm` to clean up before switching approaches.
 
 ## Environment Variables
 
@@ -112,23 +148,45 @@ PhishIntel relies on several environment variables for proper configuration. The
 
 | Variable         | Description                                                                 |
 |------------------|-----------------------------------------------------------------------------|
-| `NODE_ENV`       | Defines the environment mode. Use `development` for local setups or `production` for live deployments. |
+| `NODE_ENV`       | Defines the environment mode. Use `development` for local setups or `production` for live deployments. If NODE_ENV is not set, it defaults to 'production'. Set it to 'development' only if you want development logging and features. |
 | `DB_URL`         | MongoDB connection string. Can point to a local MongoDB instance or a managed cluster like MongoDB Atlas. Example: `mongodb://localhost:27017/phishintel` or `mongodb+srv://<username>:<password>@cluster.mongodb.net/phishintel`. |
-| `ADMIN_PASSWORD` | Initial login password for the default `admin` user. Required to access the Admin Console. |
+| `ADMIN_PASSWORD` | Initial password for the default `admin` user. **Used only once during setup to create the root admin account. |
 | `SESSION_SECRET` | A secure, random string used to sign user sessions. Keep this value private, especially in production. |
 | `PORT`           | The port the backend server listens on. Defaults to `8080`. You can change this if needed. |
 
 > ⚠️ For production deployments, avoid hardcoding sensitive credentials in configuration files. Use environment injection tools, secret managers, or CI/CD pipeline variables for security.
 
+## Initial Root Admin Setup
+
+When you first deploy PhishIntel, the application requires a root admin user. This user is created by running the `initRootAdmin.js` script, which uses the `ADMIN_PASSWORD` environment variable to set the initial password. This process only happens once—if a root admin already exists, the script will not create a new one.
+
+**To initialize the root admin:**
+
+```bash
+# Ensure your .env file contains ADMIN_PASSWORD
+node initRootAdmin.js
+```
+
+- The root admin will have:
+  - Username: `admin`
+  - First Name: `Administrator`
+  - Last Name: (blank)
+  - Email: `admin@localhost`
+  - Role: `admin`
+  - isRoot: `true`
+- After setup, you can log in as the root admin and change the password from within the application. You do **not** need to update the environment variable again.
+
+> **Note:** The `ADMIN_PASSWORD` environment variable is only used for this initial setup. For security, you may remove or rotate it after the root admin is created.
+
 ## Getting Help
 
-If you run into any issues while using or setting up PhishIntel, here’s how to get support:
+If you run into any issues while using or setting up PhishIntel, here's how to get support:
 
 - **Browse Existing Issues**  
   Start by checking the [Issues section on GitHub](https://github.com/cloudsecnetwork/phishintel/issues) to see if your question or problem has already been addressed.
 
 - **Open a New Issue**  
-  If you can’t find a solution, [open a new GitHub issue](https://github.com/cloudsecnetwork/phishintel/issues/new). Be sure to include:
+  If you can't find a solution, [open a new GitHub issue](https://github.com/cloudsecnetwork/phishintel/issues/new). Be sure to include:
   - A clear and concise description of the issue
   - Steps to reproduce it
   - Any relevant error messages or logs
@@ -146,6 +204,6 @@ If you run into any issues while using or setting up PhishIntel, here’s how to
   Double-check that your `.env` file is properly configured and that services like MongoDB are running and reachable.
 
 - **Need Direct Support?**  
-  We maintain a private Discord server for contributors and early adopters. While public access isn’t available yet, you can reach out to us directly via email at [hello@cloudsecnetwork.com](mailto:hello@cloudsecnetwork.com) and we’ll be happy to assist or extend an invite if appropriate.
+  We maintain a private Discord server for contributors and early adopters. While public access isn't available yet, you can reach out to us directly via email at [hello@cloudsecnetwork.com](mailto:hello@cloudsecnetwork.com) and we'll be happy to assist or extend an invite if appropriate.
 
-Your feedback is valuable, and we’re here to help you succeed with PhishIntel!
+Your feedback is valuable, and we're here to help you succeed with PhishIntel!

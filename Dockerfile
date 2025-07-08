@@ -32,8 +32,12 @@ COPY . .
 # Copy built frontend files from the 'build-client' stage
 COPY --from=build-client /usr/src/app/build ./client/build
 
+# Copy entrypoint script
+COPY docker-entrypoint.sh /usr/src/app/
+RUN chmod +x /usr/src/app/docker-entrypoint.sh
+
 # Expose port 8080
 EXPOSE 8080
 
-# Run the server
-CMD ["node", "app.js"]
+# Use entrypoint script to initialize root admin and start app
+ENTRYPOINT ["/usr/src/app/docker-entrypoint.sh"]
