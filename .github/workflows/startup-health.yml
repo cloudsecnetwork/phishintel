@@ -46,8 +46,8 @@ jobs:
       - name: Install wait-on
         run: npm install -g wait-on@8.0.3
 
-      - name: Wait for backend /health route
-        run: wait-on http://localhost:8080/health --timeout=30000
+      - name: Wait for backend /api/system/health route
+        run: wait-on http://localhost:8080/api/system/health --timeout=30000
 
   test-frontend:
     name: Frontend Build Check
