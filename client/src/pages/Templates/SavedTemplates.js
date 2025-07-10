@@ -101,11 +101,20 @@ const SavedTemplates = ({ templates, loading, error }) => {
                     </List>
                 </Box>
             ) : (
-                <Grid item xs={12}>
-                    <Alert severity="info" variant="outlined">
-                        No email templates have been created yet.
-                    </Alert>
-                </Grid>
+                <Box sx={{ 
+                    textAlign: 'center', 
+                    py: 4,
+                    backgroundColor: '#fafafa',
+                    borderRadius: 2,
+                    border: '1px dashed #ccc'
+                }}>
+                    <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
+                        No templates found
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        You haven't created any email templates yet. Import your first template to get started.
+                    </Typography>
+                </Box>
             )}
 
         </Box>

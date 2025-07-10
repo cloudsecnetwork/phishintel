@@ -109,26 +109,18 @@ const Audience = () => {
                         {!loading && !error && audiences.length === 0 && (
                             <Grid item xs={12}>
                                 <Box sx={{ 
-                                    display: 'flex', 
-                                    justifyContent: 'center', 
-                                    alignItems: 'center',
-                                    py: 6
+                                    textAlign: 'center', 
+                                    py: 4,
+                                    backgroundColor: '#fafafa',
+                                    borderRadius: 2,
+                                    border: '1px dashed #ccc'
                                 }}>
-                                    <Alert 
-                                        severity="info" 
-                                        variant="outlined" 
-                                        sx={{ 
-                                            borderRadius: '8px',
-                                            borderWidth: '1px',
-                                            maxWidth: '500px',
-                                            textAlign: 'center',
-                                            '& .MuiAlert-icon': {
-                                                fontSize: '1.25rem'
-                                            }
-                                        }}
-                                    >
-                                        No audiences have been created yet. Click "Create Audience" to get started.
-                                    </Alert>
+                                    <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
+                                        No audiences found
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        You haven't created any audiences yet. Create your first audience to get started.
+                                    </Typography>
                                 </Box>
                             </Grid>
                         )}

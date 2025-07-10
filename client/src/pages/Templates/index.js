@@ -149,7 +149,7 @@ const Templates = () => {
                     <Box sx={{ borderBottom: 1, borderColor: 'divider', mt: 2 }}>
                         <Tabs value={value} onChange={handleChange} aria-label="template builder tabs">
                             <Tab label="Saved" />
-                            <Tab label="Builder" />
+                            <Tab label="AI Builder" />
                         </Tabs>
                     </Box>
                     <TabPanel value={value} index={0}>
