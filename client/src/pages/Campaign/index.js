@@ -68,9 +68,20 @@ const Campaign = () => {
                     ) : error ? (
                         <Alert severity="error">{error}</Alert>
                     ) : campaigns.length === 0 ? (
-                        <Alert severity="info">
-                            No campaigns found. Click "Start Campaign" to create your first campaign.
-                        </Alert>
+                        <Box sx={{ 
+                            textAlign: 'center', 
+                            py: 4,
+                            backgroundColor: '#fafafa',
+                            borderRadius: 2,
+                            border: '1px dashed #ccc'
+                        }}>
+                            <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
+                                No campaigns found
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                You haven't created any campaigns yet. Create your first campaign to get started.
+                            </Typography>
+                        </Box>
                     ) : (
                         <Grid sx={{
                             maxWidth: '100%',
