@@ -23,7 +23,7 @@ const CampaignDetailsCard = ({ campaign }) => {
                                         whiteSpace: 'nowrap',
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
-                                        fontWeight: 500
+                                        fontWeight: 500,
                                     }}
                                     variant="h6">
                                     {campaign?.name}

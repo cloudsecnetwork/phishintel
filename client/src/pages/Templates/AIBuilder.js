@@ -10,7 +10,11 @@ import {
     Paper,
     IconButton,
     Tooltip,
-    Divider
+    Divider,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel
 } from '@mui/material';
 import {
     AutoAwesome as AutoAwesomeIcon,
@@ -81,282 +85,142 @@ const AIBuilder = () => {
                         {/* Left Column - Compact Input Parameters */}
                         <Grid item xs={12} md={5}>
                             <Typography variant="h6" sx={{ mb: 4 }}>
-                                Input Parameters
+                                Example Parameters
                             </Typography>
                             
                             {/* First Row - 2 columns */}
                             <Grid container spacing={2} sx={{ mb: 2 }}>
                                 <Grid item xs={6}>
-                                    <TextField
-                                        fullWidth
-                                        select
-                                        label="Target Audience"
-                                        defaultValue="general-employees"
-                                        size="small"
-                                        sx={{ 
-                                            '& .MuiSelect-select': { 
-                                                color: 'text.primary',
-                                                cursor: 'pointer'
-                                            },
-                                            '&:hover': {
-                                                '& .MuiSelect-select': {
-                                                    backgroundColor: 'rgba(25, 118, 210, 0.04)'
-                                                }
-                                            },
-                                            '& .MuiMenu-paper': {
-                                                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-                                                borderRadius: '8px',
-                                                border: '1px solid rgba(0,0,0,0.08)'
-                                            },
-                                            '& .MuiMenuItem-root': {
-                                                padding: '8px 16px',
-                                                fontSize: '0.875rem'
-                                            }
-                                        }}
-                                    >
-                                        <option value="it-staff">IT Staff</option>
-                                        <option value="executives">Executives</option>
-                                        <option value="finance">Finance</option>
-                                        <option value="hr">HR</option>
-                                        <option value="sales">Sales</option>
-                                        <option value="general-employees">General</option>
-                                        <option value="contractors">Contractors</option>
-                                        <option value="new-hires">New Hires</option>
-                                    </TextField>
+                                    <FormControl fullWidth size="small">
+                                        <InputLabel>Target Audience</InputLabel>
+                                        <Select
+                                            defaultValue="general-employees"
+                                            label="Target Audience"
+                                        >
+                                            <MenuItem value="it-staff">IT Staff</MenuItem>
+                                            <MenuItem value="executives">Executives</MenuItem>
+                                            <MenuItem value="finance">Finance</MenuItem>
+                                            <MenuItem value="hr">HR</MenuItem>
+                                            <MenuItem value="sales">Sales</MenuItem>
+                                            <MenuItem value="general-employees">General</MenuItem>
+                                            <MenuItem value="contractors">Contractors</MenuItem>
+                                            <MenuItem value="new-hires">New Hires</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <TextField
-                                        fullWidth
-                                        select
-                                        label="Objective"
-                                        defaultValue="initial-awareness"
-                                        size="small"
-                                        sx={{ 
-                                            '& .MuiSelect-select': { 
-                                                color: 'text.primary',
-                                                cursor: 'pointer'
-                                            },
-                                            '&:hover': {
-                                                '& .MuiSelect-select': {
-                                                    backgroundColor: 'rgba(25, 118, 210, 0.04)'
-                                                }
-                                            },
-                                            '& .MuiMenu-paper': {
-                                                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-                                                borderRadius: '8px',
-                                                border: '1px solid rgba(0,0,0,0.08)'
-                                            },
-                                            '& .MuiMenuItem-root': {
-                                                padding: '8px 16px',
-                                                fontSize: '0.875rem'
-                                            }
-                                        }}
-                                    >
-                                        <option value="initial-awareness">Initial Awareness</option>
-                                        <option value="advanced-training">Advanced Training</option>
-                                        <option value="compliance-training">Compliance</option>
-                                        <option value="incident-response">Incident Response</option>
-                                        <option value="social-engineering">Social Engineering</option>
-                                        <option value="data-protection">Data Protection</option>
-                                    </TextField>
+                                    <FormControl fullWidth size="small">
+                                        <InputLabel>Objective</InputLabel>
+                                        <Select
+                                            defaultValue="initial-awareness"
+                                            label="Objective"
+                                        >
+                                            <MenuItem value="initial-awareness">Initial Awareness</MenuItem>
+                                            <MenuItem value="advanced-training">Advanced Training</MenuItem>
+                                            <MenuItem value="compliance-training">Compliance</MenuItem>
+                                            <MenuItem value="incident-response">Incident Response</MenuItem>
+                                            <MenuItem value="social-engineering">Social Engineering</MenuItem>
+                                            <MenuItem value="data-protection">Data Protection</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
                             </Grid>
                             
                             {/* Second Row - 2 columns */}
                             <Grid container spacing={2} sx={{ mb: 2 }}>
                                 <Grid item xs={6}>
-                                    <TextField
-                                        fullWidth
-                                        select
-                                        label="Threat Type"
-                                        defaultValue="credential-harvesting"
-                                        size="small"
-                                        sx={{ 
-                                            '& .MuiSelect-select': { 
-                                                color: 'text.primary',
-                                                cursor: 'pointer'
-                                            },
-                                            '&:hover': {
-                                                '& .MuiSelect-select': {
-                                                    backgroundColor: 'rgba(25, 118, 210, 0.04)'
-                                                }
-                                            },
-                                            '& .MuiMenu-paper': {
-                                                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-                                                borderRadius: '8px',
-                                                border: '1px solid rgba(0,0,0,0.08)'
-                                            },
-                                            '& .MuiMenuItem-root': {
-                                                padding: '8px 16px',
-                                                fontSize: '0.875rem'
-                                            }
-                                        }}
-                                    >
-                                        <option value="credential-harvesting">Credential Harvesting</option>
-                                        <option value="malware-distribution">Malware</option>
-                                        <option value="business-email-compromise">BEC</option>
-                                        <option value="social-engineering">Social Engineering</option>
-                                        <option value="data-exfiltration">Data Exfiltration</option>
-                                        <option value="ransomware-precursor">Ransomware</option>
-                                    </TextField>
+                                    <FormControl fullWidth size="small">
+                                        <InputLabel>Threat Type</InputLabel>
+                                        <Select
+                                            defaultValue="credential-harvesting"
+                                            label="Threat Type"
+                                        >
+                                            <MenuItem value="credential-harvesting">Credential Harvesting</MenuItem>
+                                            <MenuItem value="malware-distribution">Malware</MenuItem>
+                                            <MenuItem value="business-email-compromise">BEC</MenuItem>
+                                            <MenuItem value="social-engineering">Social Engineering</MenuItem>
+                                            <MenuItem value="data-exfiltration">Data Exfiltration</MenuItem>
+                                            <MenuItem value="ransomware-precursor">Ransomware</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <TextField
-                                        fullWidth
-                                        select
-                                        label="Industry"
-                                        defaultValue="general"
-                                        size="small"
-                                        sx={{ 
-                                            '& .MuiSelect-select': { 
-                                                color: 'text.primary',
-                                                cursor: 'pointer'
-                                            },
-                                            '&:hover': {
-                                                '& .MuiSelect-select': {
-                                                    backgroundColor: 'rgba(25, 118, 210, 0.04)'
-                                                }
-                                            },
-                                            '& .MuiMenu-paper': {
-                                                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-                                                borderRadius: '8px',
-                                                border: '1px solid rgba(0,0,0,0.08)'
-                                            },
-                                            '& .MuiMenuItem-root': {
-                                                padding: '8px 16px',
-                                                fontSize: '0.875rem'
-                                            }
-                                        }}
-                                    >
-                                        <option value="general">General Business</option>
-                                        <option value="healthcare">Healthcare</option>
-                                        <option value="financial-services">Financial</option>
-                                        <option value="technology">Technology</option>
-                                        <option value="manufacturing">Manufacturing</option>
-                                        <option value="government">Government</option>
-                                        <option value="education">Education</option>
-                                        <option value="retail">Retail</option>
-                                        <option value="legal">Legal</option>
-                                    </TextField>
+                                    <FormControl fullWidth size="small">
+                                        <InputLabel>Industry</InputLabel>
+                                        <Select
+                                            defaultValue="general"
+                                            label="Industry"
+                                        >
+                                            <MenuItem value="general">General Business</MenuItem>
+                                            <MenuItem value="healthcare">Healthcare</MenuItem>
+                                            <MenuItem value="financial-services">Financial</MenuItem>
+                                            <MenuItem value="technology">Technology</MenuItem>
+                                            <MenuItem value="manufacturing">Manufacturing</MenuItem>
+                                            <MenuItem value="government">Government</MenuItem>
+                                            <MenuItem value="education">Education</MenuItem>
+                                            <MenuItem value="retail">Retail</MenuItem>
+                                            <MenuItem value="legal">Legal</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
                             </Grid>
                             
                             {/* Third Row - 2 columns */}
                             <Grid container spacing={2} sx={{ mb: 2 }}>
                                 <Grid item xs={6}>
-                                    <TextField
-                                        fullWidth
-                                        select
-                                        label="Tone"
-                                        defaultValue="formal-corporate"
-                                        size="small"
-                                        sx={{ 
-                                            '& .MuiSelect-select': { 
-                                                color: 'text.primary',
-                                                cursor: 'pointer'
-                                            },
-                                            '&:hover': {
-                                                '& .MuiSelect-select': {
-                                                    backgroundColor: 'rgba(25, 118, 210, 0.04)'
-                                                }
-                                            },
-                                            '& .MuiMenu-paper': {
-                                                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-                                                borderRadius: '8px',
-                                                border: '1px solid rgba(0,0,0,0.08)'
-                                            },
-                                            '& .MuiMenuItem-root': {
-                                                padding: '8px 16px',
-                                                fontSize: '0.875rem'
-                                            }
-                                        }}
-                                    >
-                                        <option value="formal-corporate">Formal</option>
-                                        <option value="urgent-time-sensitive">Urgent</option>
-                                        <option value="friendly-collegial">Friendly</option>
-                                        <option value="authoritative">Authoritative</option>
-                                        <option value="technical">Technical</option>
-                                        <option value="compliance-focused">Compliance</option>
-                                    </TextField>
+                                    <FormControl fullWidth size="small">
+                                        <InputLabel>Tone</InputLabel>
+                                        <Select
+                                            defaultValue="formal-corporate"
+                                            label="Tone"
+                                        >
+                                            <MenuItem value="formal-corporate">Formal</MenuItem>
+                                            <MenuItem value="urgent-time-sensitive">Urgent</MenuItem>
+                                            <MenuItem value="friendly-collegial">Friendly</MenuItem>
+                                            <MenuItem value="authoritative">Authoritative</MenuItem>
+                                            <MenuItem value="technical">Technical</MenuItem>
+                                            <MenuItem value="compliance-focused">Compliance</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <TextField
-                                        fullWidth
-                                        select
-                                        label="Trigger"
-                                        defaultValue="none"
-                                        size="small"
-                                        sx={{ 
-                                            '& .MuiSelect-select': { 
-                                                color: 'text.primary',
-                                                cursor: 'pointer'
-                                            },
-                                            '&:hover': {
-                                                '& .MuiSelect-select': {
-                                                    backgroundColor: 'rgba(25, 118, 210, 0.04)'
-                                                }
-                                            },
-                                            '& .MuiMenu-paper': {
-                                                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-                                                borderRadius: '8px',
-                                                border: '1px solid rgba(0,0,0,0.08)'
-                                            },
-                                            '& .MuiMenuItem-root': {
-                                                padding: '8px 16px',
-                                                fontSize: '0.875rem'
-                                            }
-                                        }}
-                                    >
-                                        <option value="none">None</option>
-                                        <option value="tax-season">Tax Season</option>
-                                        <option value="holidays">Holidays</option>
-                                        <option value="year-end">Year-end</option>
-                                        <option value="mergers-acquisitions">M&A</option>
-                                        <option value="layoffs-restructuring">Layoffs</option>
-                                        <option value="system-updates">System Updates</option>
-                                        <option value="policy-changes">Policy Changes</option>
-                                        <option value="cyber-threats">Cyber Threats</option>
-                                        <option value="custom">Custom</option>
-                                    </TextField>
+                                    <FormControl fullWidth size="small">
+                                        <InputLabel>Trigger</InputLabel>
+                                        <Select
+                                            defaultValue="none"
+                                            label="Trigger"
+                                        >
+                                            <MenuItem value="none">None</MenuItem>
+                                            <MenuItem value="tax-season">Tax Season</MenuItem>
+                                            <MenuItem value="holidays">Holidays</MenuItem>
+                                            <MenuItem value="year-end">Year-end</MenuItem>
+                                            <MenuItem value="mergers-acquisitions">M&A</MenuItem>
+                                            <MenuItem value="layoffs-restructuring">Layoffs</MenuItem>
+                                            <MenuItem value="system-updates">System Updates</MenuItem>
+                                            <MenuItem value="policy-changes">Policy Changes</MenuItem>
+                                            <MenuItem value="cyber-threats">Cyber Threats</MenuItem>
+                                            <MenuItem value="custom">Custom</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
                             </Grid>
                             
                             {/* Fourth Row - 2 columns */}
                             <Grid container spacing={2} sx={{ mb: 3 }}>
                                 <Grid item xs={6}>
-                                    <TextField
-                                        fullWidth
-                                        select
-                                        label="Call-to-Action"
-                                        defaultValue="click-link"
-                                        size="small"
-                                        sx={{ 
-                                            '& .MuiSelect-select': { 
-                                                color: 'text.primary',
-                                                cursor: 'pointer'
-                                            },
-                                            '&:hover': {
-                                                '& .MuiSelect-select': {
-                                                    backgroundColor: 'rgba(25, 118, 210, 0.04)'
-                                                }
-                                            },
-                                            '& .MuiMenu-paper': {
-                                                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-                                                borderRadius: '8px',
-                                                border: '1px solid rgba(0,0,0,0.08)'
-                                            },
-                                            '& .MuiMenuItem-root': {
-                                                padding: '8px 16px',
-                                                fontSize: '0.875rem'
-                                            }
-                                        }}
-                                    >
-                                        <option value="click-link">Click Link</option>
-                                        <option value="download-attachment">Download</option>
-                                        <option value="reply-information">Reply</option>
-                                        <option value="transfer-funds">Transfer</option>
-                                        <option value="system-access">System Access</option>
-                                    </TextField>
+                                    <FormControl fullWidth size="small">
+                                        <InputLabel>Call-to-Action</InputLabel>
+                                        <Select
+                                            defaultValue="click-link"
+                                            label="Call-to-Action"
+                                        >
+                                            <MenuItem value="click-link">Click Link</MenuItem>
+                                            <MenuItem value="download-attachment">Download</MenuItem>
+                                            <MenuItem value="reply-information">Reply</MenuItem>
+                                            <MenuItem value="transfer-funds">Transfer</MenuItem>
+                                            <MenuItem value="system-access">System Access</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Box sx={{ height: '100%', display: 'flex', alignItems: 'center' }}>

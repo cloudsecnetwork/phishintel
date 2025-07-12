@@ -159,8 +159,8 @@ const CampaignDetail = () => {
                 <Container maxWidth="lg" sx={{ flexGrow: 1, mt: '96px', mb: 2 }}>
 
                     {/* Main Campaign Details Content */}
-                    <Grid container spacing={2} sx={{ mb: 4 }} alignItems="center">
-                        <Grid item xs={12} md={8} sx={{ pl: 2, pb: 2 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+                        <Box sx={{ pl: 2, pb: 2 }}>
                             <Typography 
                                 sx={{ 
                                     mb: 1, 
@@ -179,10 +179,10 @@ const CampaignDetail = () => {
                             <Typography sx={{ fontSize: 13 }} color="text.secondary">
                                 View and manage your campaign details, track progress, and analyze results.
                             </Typography>
-                        </Grid>
+                        </Box>
 
                         {/* More Button */}
-                        <Grid item xs={2} sx={{ textAlign: 'right' }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <IconButton
                                 aria-label="more options"
                                 aria-controls="campaign-options-menu"
@@ -226,8 +226,8 @@ const CampaignDetail = () => {
                                     Delete Campaign
                                 </MenuItem>
                             </Menu>
-                        </Grid>
-                    </Grid>
+                        </Box>
+                    </Box>
 
                     {archiveError && <Alert sx={{ mb: 2 }} severity="error">{archiveError}</Alert>}
                     {archiveSuccess && <Alert sx={{ mb: 2 }} severity="success">Campaign archived successfully!</Alert>}

@@ -73,24 +73,33 @@ const StartCampaign = () => {
             <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 {campaignPrepared ? ( // Show "Your campaign is ready" view if campaign is prepared
                     <Container maxWidth="lg" sx={{ flexGrow: 1, mt: '110px', mb: 2, textAlign: 'center' }}>
-                        <Typography variant="h5" color="primary" sx={{ mb: 2 }}>
+                        <Typography variant="h5" color="primary" sx={{ mb: 2, fontWeight: 700 }}>
                             Campaign Preparation Complete
                         </Typography>
-                        <Typography variant="body1" color="text.secondary" sx={{ mb: 3, px: 4 }}>
-                            Congratulations! Your campaign has been successfully prepared and is now ready.
-                            You can proceed launch your phishing campaign.
-                        </Typography>
+                        <Grid container justifyContent="center">
+                            <Grid item xs={12} md={6}>
+                                <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                                    Congratulations! Your campaign has been successfully prepared and is now ready.
+                                    You can proceed launch your phishing campaign.
+                                </Typography>
+                            </Grid>
+                        </Grid>
+
 
                         {/* Success Icon */}
                         <Box
                             sx={{
-                                width: '84px',
-                                height: '84px',
-                                margin: '0 auto',
-                                display: 'block'
+                                margin: '0 auto 32px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
                             }}
                         >
-                            <SuccessIcon style={{ width: '100%', height: '100%' }} />
+                            <SuccessIcon style={{ 
+                                width: '60px', 
+                                height: '60px',
+                                color: '#4caf50'
+                            }} />
                         </Box>
 
                         {/* Button */}
@@ -98,15 +107,35 @@ const StartCampaign = () => {
                             variant="contained"
                             color="primary"
                             size="large"
-                            sx={{ mt: 4 }}
+                            sx={{ 
+                                mt: 4,
+                                px: 4,
+                                py: 1.5,
+                                borderRadius: 2,
+                                boxShadow: '0 4px 12px rgba(25, 118, 210, 0.2)',
+                                '&:hover': {
+                                    boxShadow: '0 6px 16px rgba(25, 118, 210, 0.3)',
+                                    transform: 'translateY(-1px)'
+                                },
+                                transition: 'all 0.2s ease-in-out'
+                            }}
                             onClick={handleLaunch}
                         >
                             {startLoading ? <CircularProgress size={24} /> : "Launch Campaign"}
                         </Button>
 
                         {startError && (
-                            <Box sx={{ mt: 2 }}>
-                                <Alert severity="error">{startError || "An error occurred while starting the campaign."}</Alert>
+                            <Box sx={{ mt: 3 }}>
+                                <Alert 
+                                    severity="error" 
+                                    sx={{ 
+                                        borderRadius: 2,
+                                        maxWidth: '500px',
+                                        margin: '0 auto'
+                                    }}
+                                >
+                                    {startError || "An error occurred while starting the campaign."}
+                                </Alert>
                             </Box>
                         )}
                     </Container>
