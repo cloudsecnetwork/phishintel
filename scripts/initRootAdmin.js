@@ -1,7 +1,7 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import userService from './services/userService.js';
+import userService from '../services/userService.js';
 
 const DB_URL = process.env.DB_URL  || 'mongodb://localhost:27017/phishintel';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
