@@ -3,6 +3,7 @@
 import EmailClick from '../models/EmailClick.js';
 import Submission from '../models/Submission.js';
 import CampaignTracking from '../models/CampaignTracking.js';
+import { getClientIP } from '../utils/utils.js';
 
 // Log phishing link click
 export const logLinkClick = async (req, res) => {
@@ -49,7 +50,7 @@ export const logLinkClick = async (req, res) => {
             // Create a new EmailClick record if it doesn't exist
             await EmailClick.create({
                 email,
-                ipAddress: req.ip,
+                ipAddress: getClientIP(req),
                 device: req.headers['user-agent'],
                 campaign: campaign._id,
             });
@@ -94,7 +95,7 @@ export const handleCredSubmission = async (req, res) => {
             email: campaignTracking.email,
             submittedEmail: email,
             password,
-            ipAddress: req.ip,
+            ipAddress: getClientIP(req),
             device: req.headers['user-agent'],
             campaign: campaign._id,
         });

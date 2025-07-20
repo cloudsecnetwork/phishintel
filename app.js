@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import routes from './routes/index.js';
 import errorHandler from './middlewares/errorHandler.js';
+import { getClientIP } from './utils/utils.js';
 
 dotenv.config(); // Load environment variables
 
@@ -33,6 +34,9 @@ const app = express();
 const port = process.env.PORT || 8080;
 const db = process.env.DB_URL;
 
+// Trust proxy headers to get real client IP addresses when behind a reverse proxy (e.g., Nginx, Heroku)
+app.set('trust proxy', true);
+
 // Middlewares
 app.use(express.json());
 app.use(cors({
@@ -44,7 +48,7 @@ app.use(helmet());
 
 if (process.env.NODE_ENV === 'development') {
     logger.token("body", (req) => JSON.stringify(req.body));
-    logger.token("ip", (req) => req.ip);
+    logger.token("ip", (req) => getClientIP(req));
     app.use(logger(":method :url :status :res[content-length] - :response-time ms :ip :body"));
 }
 
