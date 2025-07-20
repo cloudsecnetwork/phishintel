@@ -65,7 +65,7 @@ From the root project directory:
 npm install
 
 # After starting MongoDB, initialize the root admin (first time only):
-node initRootAdmin.js
+node scripts/initRootAdmin.js
 
 # Start backend with auto-reload
 nodemon app.js
