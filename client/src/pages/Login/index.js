@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 // import { ReactComponent as GoogleIcon } from '../../assets/icons/google.svg';
-import Copyright from '../../components/Copyright';
 import { useLogin } from '../../hooks/useLogin';
 import Alert from '@mui/material/Alert';
 
@@ -88,7 +87,6 @@ export default function SignIn() {
                         </Button>
                     </Box>
                 </Box>
-                <Copyright sx={{ mt: 8, mb: 4 }} />
             </Container>
         </ThemeProvider>
     );

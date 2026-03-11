@@ -26,9 +26,11 @@ axiosInstance.interceptors.response.use(
     response => response,
     error => {
         if (error.response && error.response.status === 401) {
-            // Clear token and redirect to login
-            clearToken();
-            window.location.href = '/console';
+            const isLoginRequest = error.config?.url?.includes('/api/auth');
+            if (!isLoginRequest) {
+                clearToken();
+                window.location.href = '/console';
+            }
         }
         return Promise.reject(error);
     }

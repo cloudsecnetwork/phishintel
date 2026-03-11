@@ -19,7 +19,6 @@ export const useLogin = () => {
             password: data.get('password'),
         };
 
-        console.log(loginData)
         try {
             setLoading(true);
             setError(''); // Clear previous errors

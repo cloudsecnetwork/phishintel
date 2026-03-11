@@ -2,9 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import ProtectedRoute from './components/ProtectedRoute';
+import ConsoleEntry from './components/ConsoleEntry';
 import './App.css';
 
-import Login from './pages/Login';
 import MSPortal from './pages/MSPortal';
 import Dashboard from './pages/Dashboard';
 
@@ -40,8 +40,8 @@ function App() {
     <ThemeProvider theme={THEME}>
       <Router>
         <Routes>
-          <Route path="/" element={<Navigate to="/404" replace />} />
-          <Route path="/console" element={<Login />} />
+          <Route path="/" element={<Navigate to="/console" replace />} />
+          <Route path="/console" element={<ConsoleEntry />} />
           <Route path="/account/signin" element={<MSPortal />} />
           <Route path="/console/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
