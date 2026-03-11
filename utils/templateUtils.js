@@ -1,31 +1,30 @@
 import { HtmlValidate } from 'html-validate';
 
+const EXEMPTED_RULE_IDS = ['element-required-attributes', 'element-required-content'];
+
 /**
  * Validate if the HTML content is well-formed
  * @param {string} htmlContent
  * @returns {Promise<string[]>} - List of errors
  */
 export const validateHTMLContent = async (htmlContent) => {
-    // const validator = new HtmlValidate();
+    const validator = new HtmlValidate();
 
     try {
-        // const results = await validator.validateString(htmlContent);
+        const results = await validator.validateString(htmlContent);
 
-        // // Check if validation results are valid and errors exist
-        // if (results?.valid === false && results?.errorCount > 0) {
-        //     const exemptedRuleIds = ['element-required-attributes', 'element-required-content'];
-        //     // Filter out messages with the exempted ruleIds
-        //     const filteredMessages = results.results
-        //         .flatMap(result => result.messages.filter(message => !exemptedRuleIds.includes(message.ruleId))
-        //             .map(message => `Line ${message.line}: ${message.message}`)
-        //         );
-        //     return filteredMessages;
-        // }
+        if (results?.valid === false && results?.errorCount > 0) {
+            const filteredMessages = results.results
+                .flatMap(result =>
+                    result.messages
+                        .filter(message => !EXEMPTED_RULE_IDS.includes(message.ruleId))
+                        .map(message => `Line ${message.line}: ${message.message}`)
+                );
+            return filteredMessages;
+        }
 
-        // No errors
         return [];
     } catch (error) {
-        // Log error for debugging and throw a descriptive error
         console.error("Validation error:", error);
         throw new Error(error.message || 'Failed to validate HTML content');
     }
@@ -52,4 +51,28 @@ export const validatePlaceholders = (htmlContent, supportedFields) => {
     }
 
     return errors;
+};
+
+/** Allowed keys for cssSettings (must match templateService.ALLOWED_CSS_KEYS) */
+const ALLOWED_CSS_KEYS = ['fontFamily', 'fontSize', 'primaryColor'];
+
+/**
+ * Sanitize cssSettings to only allow whitelisted keys and string values.
+ * @param {object} cssSettings - Raw cssSettings from request
+ * @returns {object|null} - Sanitized object or null
+ */
+export const sanitizeCssSettings = (cssSettings) => {
+    if (cssSettings == null || typeof cssSettings !== 'object') return null;
+    const out = {};
+    let hasAny = false;
+    for (const key of ALLOWED_CSS_KEYS) {
+        if (cssSettings[key] != null && typeof cssSettings[key] === 'string') {
+            const v = String(cssSettings[key]).trim();
+            if (v.length > 0 && v.length < 500) {
+                out[key] = v;
+                hasAny = true;
+            }
+        }
+    }
+    return hasAny ? out : null;
 };

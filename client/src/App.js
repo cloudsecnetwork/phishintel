@@ -16,6 +16,7 @@ import SenderProfile from './pages/SenderProfile';
 import CreateSenderProfile from './pages/SenderProfile/CreateSenderProfile';
 
 import Templates from './pages/Templates';
+import TemplateComposer from './pages/Templates/TemplateComposer';
 
 import Campaign from './pages/Campaign';
 import StartCampaign from './pages/Campaign/StartCampaign';
@@ -53,6 +54,8 @@ function App() {
           <Route path="/console/sender-profile/create" element={<ProtectedRoute><CreateSenderProfile /></ProtectedRoute>} />
 
           <Route path="/console/templates" element={<ProtectedRoute><Templates /></ProtectedRoute>} />
+          <Route path="/console/templates/new" element={<ProtectedRoute><TemplateComposer /></ProtectedRoute>} />
+          <Route path="/console/templates/:id/edit" element={<ProtectedRoute><TemplateComposer /></ProtectedRoute>} />
 
           <Route path="/console/campaign" element={<ProtectedRoute><Campaign /></ProtectedRoute>} />
           <Route path="/console/campaign/create" element={<ProtectedRoute><StartCampaign /></ProtectedRoute>} />

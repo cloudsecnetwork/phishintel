@@ -1,14 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Typography, Container, Box, Button, Grid, Tabs, Tab } from '@mui/material';
-import UploadIcon from '@mui/icons-material/Upload';
+import {
+    Typography,
+    Container,
+    Box,
+    Button,
+    Grid,
+    Tabs,
+    Tab,
+    Menu,
+    MenuItem,
+    Link,
+    ListItemIcon,
+    ListItemText,
+    Snackbar,
+    Alert,
+} from '@mui/material';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
+import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 import Sidebar from '../../components/Sidebar';
 import Footer from '../../components/Footer';
 import PropTypes from 'prop-types';
 import ImportTemplateDialog from './ImportTemplateDialog';
 import SavedTemplates from './SavedTemplates';
 import AIBuilder from './AIBuilder';
-import { useTemplates } from '../../hooks/useTemplates'; // Import the useTemplates hook
+import { useTemplates } from '../../hooks/useTemplates';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -53,16 +70,37 @@ const Templates = () => {
     const initialView = queryParams.get('view') || 'saved';
     const [value, setValue] = useState(viewToTabIndex[initialView] || 0);
 
-    // Dialog state
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [createMenuAnchor, setCreateMenuAnchor] = useState(null);
+    const [importLoading, setImportLoading] = useState(false);
+    const [notification, setNotification] = useState({ open: false, message: '', severity: 'success' });
+    const createMenuOpen = Boolean(createMenuAnchor);
 
-    // Import the useTemplates hook
-    const { templates, loading, error, fetchTemplates, createTemplate } = useTemplates();
+    const handleCreateMenuOpen = (event) => setCreateMenuAnchor(event.currentTarget);
+    const handleCreateMenuClose = () => setCreateMenuAnchor(null);
+    const handleWriteWithEditor = () => {
+        handleCreateMenuClose();
+        navigate('/console/templates/new');
+    };
+    const handleImportHtml = () => {
+        handleCreateMenuClose();
+        setDialogOpen(true);
+    };
+
+    const {
+        templates,
+        error,
+        listLoading,
+        fetchTemplateList,
+        createTemplate,
+    } = useTemplates();
 
     useEffect(() => {
-        // Fetch templates when the component mounts
-        fetchTemplates();
-    }, []);
+        const view = tabIndexToView[value];
+        if (view === 'saved') {
+            fetchTemplateList();
+        }
+    }, [value]);
 
     useEffect(() => {
         const currentView = queryParams.get('view') || 'saved';
@@ -70,7 +108,7 @@ const Templates = () => {
         if (currentTab !== value) {
             setValue(currentTab || 0);
         }
-    }, [location.search, value]);
+    }, [location.search]);
 
     const handleChange = (event, newValue) => {
         const view = tabIndexToView[newValue];
@@ -78,31 +116,28 @@ const Templates = () => {
         navigate(`?view=${view}`);
     };
 
-    const importTemplate = () => {
-        setDialogOpen(true); // Open the dialog
-    };
-
     const handleDialogClose = () => {
         setDialogOpen(false);
     };
 
     const handleImport = async (templateName, emailSubject, htmlFile) => {
-        console.log('Importing HTML template...');
+        setImportLoading(true);
         const formData = new FormData();
         formData.append('name', templateName);
         formData.append('subject', emailSubject);
-        formData.append('type', 'custom'); // Assuming it's a custom template
-        formData.append('file', htmlFile); // Change this to "file" to match backend
+        formData.append('type', 'custom');
+        formData.append('file', htmlFile);
 
-        // Use the createTemplate hook to send the data to the API
         const response = await createTemplate(formData);
-        if (response.success) {
-            console.log('Template imported successfully');
-        } else {
-            console.error('Error importing template:', response.message);
-        }
+        setImportLoading(false);
+        handleDialogClose();
 
-        handleDialogClose(); // Close the dialog after submission
+        if (response.success) {
+            setNotification({ open: true, message: 'Template imported successfully!', severity: 'success' });
+            fetchTemplateList();
+        } else {
+            setNotification({ open: true, message: response.message || 'Import failed', severity: 'error' });
+        }
     };
 
     return (
@@ -128,19 +163,44 @@ const Templates = () => {
                                 Email Templates
                             </Typography>
                             <Typography sx={{ fontSize: '0.8rem' }} color="text.secondary">
-                                Import and manage HTML email templates. Upload your existing templates or create new ones using the AI Email builder (coming soon).
+                                Create and manage your phishing email templates. Use the built-in editor with Markdown and dynamic placeholders, or import your own HTML. Grab a 
+                                {' '}<Link href="/sample-email-template.html" download sx={{ color: '#00bfff', fontSize: '0.8rem' }}>sample HTML template</Link> to get started quickly.
                             </Typography>
                         </Grid>
                         <Grid sx={{ p: 2 }} xs={12} md={4} lg={4}>
-                            <Grid container justifyContent="flex-end">
+                            <Grid container justifyContent="flex-end" alignItems="center">
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    startIcon={<UploadIcon />}
-                                    onClick={importTemplate}
+                                    disableElevation
+                                    onClick={handleCreateMenuOpen}
+                                    endIcon={<KeyboardArrowDownIcon sx={{ ml: -0.5 }} />}
+                                    sx={{
+                                        textTransform: 'none',
+                                    }}
                                 >
-                                    Import HTML Template
+                                    Create template
                                 </Button>
+                                <Menu
+                                    anchorEl={createMenuAnchor}
+                                    open={createMenuOpen}
+                                    onClose={handleCreateMenuClose}
+                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                >
+                                    <MenuItem onClick={handleWriteWithEditor}>
+                                        <ListItemIcon>
+                                            <EditNoteOutlinedIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Write with editor" />
+                                    </MenuItem>
+                                    <MenuItem onClick={handleImportHtml}>
+                                        <ListItemIcon>
+                                            <UploadFileOutlinedIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Import HTML" />
+                                    </MenuItem>
+                                </Menu>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -153,7 +213,11 @@ const Templates = () => {
                         </Tabs>
                     </Box>
                     <TabPanel value={value} index={0}>
-                        <SavedTemplates templates={templates} loading={loading} error={error} />
+                        <SavedTemplates
+                            templates={templates}
+                            loading={listLoading}
+                            error={error}
+                        />
                     </TabPanel>
                     <TabPanel value={value} index={1}>
                         <AIBuilder /> {/* Use the AIBuilder component */}
@@ -165,7 +229,24 @@ const Templates = () => {
                     open={dialogOpen}
                     onClose={handleDialogClose}
                     onImport={handleImport}
+                    loading={importLoading}
                 />
+
+                <Snackbar
+                    open={notification.open}
+                    autoHideDuration={4000}
+                    onClose={() => setNotification((prev) => ({ ...prev, open: false }))}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                >
+                    <Alert
+                        severity={notification.severity}
+                        onClose={() => setNotification((prev) => ({ ...prev, open: false }))}
+                        variant="filled"
+                        sx={{ width: '100%' }}
+                    >
+                        {notification.message}
+                    </Alert>
+                </Snackbar>
 
                 <Footer />
             </Box>

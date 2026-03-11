@@ -13,15 +13,17 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@uiw/react-md-editor": "^4.0.11",
     "axios": "^1.7.7",
     "chartjs-adapter-dayjs-4": "^1.0.4",
     "dayjs": "^1.11.13",
+    "dompurify": "^3.3.3",
     "jwt-decode": "^4.0.0",
+    "marked": "^15.0.0",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
-    "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -49,6 +51,7 @@
     ]
   },
   "devDependencies": {
-    "jest": "^27.5.1"
+    "jest": "^27.5.1",
+    "react-scripts": "5.0.1"
   }
 }

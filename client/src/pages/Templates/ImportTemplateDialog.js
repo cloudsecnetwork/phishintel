@@ -11,10 +11,11 @@ import {
     FormControlLabel,
     Checkbox,
     DialogContentText,
+    CircularProgress,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
-const ImportTemplateDialog = ({ open, onClose, onImport }) => {
+const ImportTemplateDialog = ({ open, onClose, onImport, loading = false }) => {
     const [templateName, setTemplateName] = useState('');
     const [emailSubject, setEmailSubject] = useState('');
     const [htmlFile, setHtmlFile] = useState(null);
@@ -166,8 +167,12 @@ const ImportTemplateDialog = ({ open, onClose, onImport }) => {
                 <Button onClick={handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={handleSubmit} color="primary" disabled={!templateName || !htmlFile || (!sameAsTemplate && !emailSubject)}>
-                    Import
+                <Button
+                    onClick={handleSubmit}
+                    color="primary"
+                    disabled={loading || !templateName || !htmlFile || (!sameAsTemplate && !emailSubject)}
+                >
+                    {loading ? <CircularProgress size={20} /> : 'Import'}
                 </Button>
             </DialogActions>
         </Dialog>
@@ -178,6 +183,7 @@ ImportTemplateDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     onImport: PropTypes.func.isRequired,
+    loading: PropTypes.bool,
 };
 
 export default ImportTemplateDialog;

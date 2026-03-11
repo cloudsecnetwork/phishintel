@@ -1,26 +1,30 @@
 // EditTemplate.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import { useTemplates } from '../../hooks/useTemplates'; // Import the hook
+import { useTemplates } from '../../hooks/useTemplates';
 
 const EditTemplate = ({ template, onEditSuccess }) => {
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [htmlContent, setHtmlContent] = useState(template.htmlContent);
 
-    const { updateTemplate } = useTemplates(); // Destructure updateTemplate from the hook
+    const { updateTemplate } = useTemplates();
 
-    const handleClickOpen = () => setOpen(true);
+    const handleClickOpen = () => {
+        if (template.sourceFormat === 'markdown') {
+            navigate(`/console/templates/${template._id}/edit`);
+            return;
+        }
+        setOpen(true);
+    };
     const handleClose = () => setOpen(false);
 
     const handleSave = async () => {
-        const formData = new FormData();
-        formData.append('htmlContent', htmlContent); // Assuming you're passing the content as formData
-
-        // Call the API to update the template
-        const response = await updateTemplate(template._id, formData); // Pass the template ID and updated content
+        const response = await updateTemplate(template._id, { htmlContent });
         if (response.success) {
-            onEditSuccess();  // Trigger the notification callback
+            onEditSuccess();
         }
         handleClose();
     };

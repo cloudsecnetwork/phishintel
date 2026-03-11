@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Grid, List, ListItem, ListItemText, Divider, CircularProgress, Typography, Alert, Collapse, IconButton } from '@mui/material';
+import { Box, List, ListItem, ListItemText, Divider, CircularProgress, Typography, Alert, Collapse, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PreviewTemplate from './PreviewTemplate';
 import EditTemplate from './EditTemplate';
@@ -7,33 +7,28 @@ import DeleteTemplate from './DeleteTemplate';
 
 const SavedTemplates = ({ templates, loading, error }) => {
     const [notification, setNotification] = useState({ open: false, message: '', severity: 'success' });
-    const [templateList, setTemplateList] = useState([]); // Initialize with empty array
+    const [templateList, setTemplateList] = useState([]);
 
-    // Sync templateList state with the templates prop
     useEffect(() => {
         if (templates && templates.length > 0) {
-            setTemplateList(templates); // Set the initial templates from the prop
+            setTemplateList(templates);
         }
-    }, [templates]); // This will run whenever the templates prop changes
+    }, [templates]);
 
-    // Handle notification open
     const triggerNotification = (message, severity = 'success') => {
         setNotification({ open: true, message, severity });
     };
 
-    // Handle close notification
     const handleCloseNotification = () => {
         setNotification({ open: false, message: '', severity: 'success' });
     };
 
-    // Handle template delete
     const handleDeleteTemplate = (id) => {
         setTemplateList((prevTemplates) => prevTemplates.filter((template) => template._id !== id));
     };
 
     return (
         <Box>
-            {/* Notification Alert */}
             <Collapse sx={{ mr: 4 }} in={notification.open}>
                 <Alert
                     severity={notification.severity}
@@ -59,7 +54,7 @@ const SavedTemplates = ({ templates, loading, error }) => {
                 </Box>
             ) : error ? (
                 <Alert sx={{ mb: 2 }} severity="error">{error}</Alert>
-            ) : templateList && templateList.length > 0 ? ( // Ensure the templateList exists and has items
+            ) : templateList && templateList.length > 0 ? (
                 <Box sx={{
                     border: '1px solid #ccc',
                     borderRadius: 2,
@@ -112,7 +107,7 @@ const SavedTemplates = ({ templates, loading, error }) => {
                         No templates found
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        You haven't created any email templates yet. Import your first template to get started.
+                        You haven't created any email templates yet. Create your first template to get started.
                     </Typography>
                 </Box>
             )}

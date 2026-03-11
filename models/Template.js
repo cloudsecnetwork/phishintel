@@ -21,6 +21,19 @@ const templateSchema = new Schema({
         type: String,
         required: true,
     },
+    sourceFormat: {
+        type: String,
+        enum: ['html', 'markdown'],
+        default: 'html',
+    },
+    markdownContent: {
+        type: String,
+        default: '',
+    },
+    cssSettings: {
+        type: Schema.Types.Mixed,
+        default: null,
+    },
 }, { timestamps: true });
 
 const Template = mongoose.model('Template', templateSchema);
