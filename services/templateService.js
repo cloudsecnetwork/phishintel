@@ -64,12 +64,19 @@ a { color: ${primaryColor}; text-decoration: underline; }
 
 /**
  * Renders an email template by replacing placeholders with contact-specific data.
+ * Supports both double-brace ({{ key }}) and single-brace ({key}) placeholder syntax.
+ * Single-brace placeholders are only replaced when the key exists in data so that
+ * CSS rules and other legitimate brace usage are preserved.
  * @param {string} templateBody - The raw HTML or text content of the email template.
  * @param {object} data - An object containing the placeholders and their respective values.
  * @returns {string} - The final rendered template with all placeholders replaced.
  */
 export const renderTemplate = (templateBody, data) => {
-    return templateBody.replace(/\{\{\s*([\w.]+)\s*\}\}/g, (match, key) => {
+    const doubleBraceResult = templateBody.replace(/\{\{\s*([\w.]+)\s*\}\}/g, (_match, key) => {
         return data[key] || '';
+    });
+
+    return doubleBraceResult.replace(/\{\s*([\w.]+)\s*\}/g, (match, key) => {
+        return key in data ? (data[key] || '') : match;
     });
 };
