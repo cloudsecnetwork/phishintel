@@ -17,6 +17,7 @@ import dataExport from './dataExport.js';
 import tracking from './tracking.js';
 import user from './user.js';
 import system from './system.js';
+import integration from './integration.js';
 
 const router = express.Router();
 
@@ -36,6 +37,7 @@ router.use("/api/resource", resource);
 router.use("/api/export", dataExport);
 router.use("/api/tracking", tracking);
 router.use("/api/users", user);
+router.use("/api/integrations", integration);
 router.use("/api/system", system);
 
 // Version endpoint

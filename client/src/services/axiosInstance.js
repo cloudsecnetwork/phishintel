@@ -22,12 +22,19 @@ axiosInstance.interceptors.request.use(
     }
 );
 
+// Paths that may return 401 for business logic (e.g. wrong password), not session invalid. Do not logout/redirect on 401 for these.
+const EXEMPT_401_LOGOUT_PATHS = [
+    '/api/auth',
+    '/api/users/me/change-password',
+];
+
 axiosInstance.interceptors.response.use(
     response => response,
     error => {
         if (error.response && error.response.status === 401) {
-            const isLoginRequest = error.config?.url?.includes('/api/auth');
-            if (!isLoginRequest) {
+            const url = error.config?.url || '';
+            const isExempt = EXEMPT_401_LOGOUT_PATHS.some(path => url.includes(path));
+            if (!isExempt) {
                 clearToken();
                 window.location.href = '/console';
             }

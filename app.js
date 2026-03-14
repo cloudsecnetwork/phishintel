@@ -48,7 +48,17 @@ app.use(cors({
 app.use(helmet());
 
 if (process.env.NODE_ENV === 'development') {
-    logger.token("body", (req) => JSON.stringify(req.body));
+    const sensitivePaths = ['/api/users/me/change-password', '/api/integrations/ai'];
+    const redactKeys = ['password', 'currentPassword', 'newPassword', 'apiKey'];
+    logger.token("body", (req) => {
+        const url = (req.originalUrl || req.url || '').split('?')[0];
+        if (sensitivePaths.some((p) => url.includes(p)) && req.body && typeof req.body === 'object') {
+            const redacted = { ...req.body };
+            redactKeys.forEach((k) => { if (redacted[k] !== undefined) redacted[k] = '[REDACTED]'; });
+            return JSON.stringify(redacted);
+        }
+        return JSON.stringify(req.body);
+    });
     logger.token("ip", (req) => getClientIP(req));
     app.use(logger(":method :url :status :res[content-length] - :response-time ms :ip :body"));
 }

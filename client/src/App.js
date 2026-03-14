@@ -22,6 +22,8 @@ import Campaign from './pages/Campaign';
 import StartCampaign from './pages/Campaign/StartCampaign';
 import CampaignDetail from './pages/Campaign/CampaignDetail';
 
+import Account from './pages/Account';
+
 import NotFoundPage from './pages/NotFound';
 
 const THEME = createTheme({
@@ -60,6 +62,8 @@ function App() {
           <Route path="/console/campaign" element={<ProtectedRoute><Campaign /></ProtectedRoute>} />
           <Route path="/console/campaign/create" element={<ProtectedRoute><StartCampaign /></ProtectedRoute>} />
           <Route path="/console/campaign/:id" element={<ProtectedRoute><CampaignDetail /></ProtectedRoute>} />
+
+          <Route path="/console/account/*" element={<ProtectedRoute><Account /></ProtectedRoute>} />
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

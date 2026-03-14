@@ -29,7 +29,7 @@ const SavedTemplates = ({ templates, loading, error }) => {
 
     return (
         <Box>
-            <Collapse sx={{ mr: 4 }} in={notification.open}>
+            <Collapse in={notification.open}>
                 <Alert
                     severity={notification.severity}
                     action={

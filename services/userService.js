@@ -5,6 +5,10 @@ export async function createUser(userData) {
   return user.save();
 }
 
+export async function findUserById(userId) {
+  return User.findById(userId);
+}
+
 export async function findUserByUsername(username) {
   return User.findOne({ username });
 }
@@ -27,6 +31,7 @@ export async function deleteUser(userId) {
 
 const userService = {
   createUser,
+  findUserById,
   findUserByUsername,
   findUserByEmail,
   findRootAdmin,

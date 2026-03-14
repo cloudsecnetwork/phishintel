@@ -32,14 +32,16 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import { useTheme } from '@mui/material/styles';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { getVersionInfo } from '../services/versionService';
+import { getMe } from '../services/userService';
 import { jwtDecode } from 'jwt-decode';
-import { getToken, clearToken } from '../utils/tokenManager';
+import { getToken, logout } from '../utils/tokenManager';
 
 const Sidebar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const navigate = useNavigate();
 
   const [open, setOpen] = useState(!isMobile);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -79,20 +81,25 @@ const Sidebar = () => {
     }
   }, []);
 
-  // Profile menu handlers
-  const handleProfileMenuOpen = (event) => {
+  // Profile menu handlers: fetch fresh user when opening so dropdown shows updated profile
+  const handleProfileMenuOpen = async (event) => {
     setProfileMenuAnchor(event.currentTarget);
+    try {
+      const res = await getMe();
+      if (res?.success && res?.data) setUser(res.data);
+    } catch (e) {
+      // keep existing user from JWT if fetch fails
+    }
   };
   const handleProfileMenuClose = () => {
     setProfileMenuAnchor(null);
   };
   const handleLogout = () => {
-    clearToken();
     handleProfileMenuClose();
-    window.location.href = '/console';
+    logout();
   };
 
-  // Grouped menu items with enhanced structure
+  // Primary nav: grouped items (Account lives at bottom, not as a group)
   const menuItems = [
     {
       group: 'Main',
@@ -111,6 +118,42 @@ const Sidebar = () => {
     },
   ];
 
+  const accountNavItem = { text: 'Account', icon: <AccountCircleIcon />, path: '/console/account/profile' };
+  const listItemSx = {
+    mx: 1,
+    mb: 0.5,
+    borderRadius: '12px',
+    backgroundColor: 'transparent',
+    color: 'inherit',
+    '&:hover': {
+      backgroundColor: 'rgba(25, 118, 210, 0.08)',
+      transform: 'translateX(4px)',
+    },
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    '& .MuiListItemIcon-root': {
+      color: theme.palette.text.secondary,
+      transition: 'color 0.3s ease',
+    },
+    '& .MuiListItemText-primary': {
+      fontWeight: 500,
+      transition: 'all 0.3s ease',
+    },
+    '&.active': {
+      backgroundColor: '#1976d2',
+      color: 'white',
+      '&:hover': {
+        backgroundColor: '#1565c0',
+      },
+      '& .MuiListItemIcon-root': {
+        color: 'white',
+      },
+      '& .MuiListItemText-primary': {
+        fontWeight: 600,
+        color: 'white',
+      },
+    },
+  };
+
   return (
     <>
       {/* Simple AppBar */}
@@ -118,7 +161,7 @@ const Sidebar = () => {
         position="fixed" 
         sx={{ zIndex: theme.zIndex.drawer + 1 }}
       >
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Toolbar variant="dense" sx={{ display: 'flex', justifyContent: 'space-between', minHeight: '48px !important', py: 0 }}>
           {isMobile && (
             <IconButton
               color="inherit"
@@ -176,15 +219,17 @@ const Sidebar = () => {
                   borderRadius: '16px',
                   boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
                   minWidth: 260,
+                  maxWidth: 'calc(100vw - 32px)',
+                  overflowX: 'hidden',
                   p: 1,
                 }
               }}
             >
-              <Box sx={{ px: 2, py: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Avatar sx={{ bgcolor: 'primary.main', color: '#fff', width: 40, height: 40, fontWeight: 700, fontSize: 22, border: '2.5px solid #fff', boxSizing: 'border-box' }}>
+              <Box sx={{ px: 2, py: 1, display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
+                <Avatar sx={{ bgcolor: 'primary.main', color: '#fff', width: 40, height: 40, fontWeight: 700, fontSize: 22, border: '2.5px solid #fff', boxSizing: 'border-box', flexShrink: 0 }}>
                   {user?.firstName ? user.firstName[0].toUpperCase() : (user?.username ? user.username[0].toUpperCase() : <AccountCircleIcon sx={{ width: 32, height: 32 }} />)}
                 </Avatar>
-                <Box>
+                <Box sx={{ minWidth: 0, overflow: 'hidden' }}>
                   <Typography variant="subtitle1" fontWeight={600} noWrap>
                     {user?.firstName || 'User'}
                   </Typography>
@@ -206,8 +251,8 @@ const Sidebar = () => {
                 </Typography>
               </Box>
               <Divider sx={{ my: 1 }} />
-              <MenuItem disabled>View Profile</MenuItem>
-              <MenuItem disabled>Update Password</MenuItem>
+              <MenuItem onClick={() => { handleProfileMenuClose(); navigate('/console/account/profile'); }}>View Profile</MenuItem>
+              <MenuItem onClick={() => { handleProfileMenuClose(); navigate('/console/account/security'); }}>Update Password</MenuItem>
               <MenuItem onClick={handleLogout}>Log Out</MenuItem>
             </Menu>
           </Box>
@@ -226,6 +271,8 @@ const Sidebar = () => {
             border: 'none',
             background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
             boxShadow: '2px 0 10px rgba(0,0,0,0.08)',
+            display: 'flex',
+            flexDirection: 'column',
           },
         }}
         open={open}
@@ -234,18 +281,17 @@ const Sidebar = () => {
           keepMounted: true,
         }}
       >
-        <Toolbar />
-        
-        <List sx={{ pt: 1 }}>
+        <Toolbar variant="dense" sx={{ minHeight: '48px !important' }} />
+        {/* Main nav: scrollable */}
+        <List sx={{ pt: 1, flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
           {menuItems.map((group) => (
             <Box key={group.group}>
-              {/* Enhanced Section Headers */}
-              <Typography 
-                variant="subtitle2" 
-                color='text.secondary' 
-                sx={{ 
-                  px: 3, 
-                  py: 1.5, 
+              <Typography
+                variant="subtitle2"
+                color="text.secondary"
+                sx={{
+                  px: 3,
+                  py: 1.5,
                   fontWeight: 700,
                   fontSize: '0.75rem',
                   textTransform: 'uppercase',
@@ -256,66 +302,50 @@ const Sidebar = () => {
               >
                 {group.group}
               </Typography>
-              
               {group.items.map((item) => (
                 <ListItem
                   key={item.text}
                   component={NavLink}
                   to={item.path}
                   onClick={isMobile ? handleToggle : undefined}
-                  sx={{
-                    mx: 1,
-                    mb: 0.5,
-                    borderRadius: '12px',
-                    backgroundColor: 'transparent',
-                    color: 'inherit',
-                    '&:hover': {
-                      backgroundColor: 'rgba(25, 118, 210, 0.08)',
-                      transform: 'translateX(4px)',
-                    },
-                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    '& .MuiListItemIcon-root': {
-                      color: theme.palette.text.secondary,
-                      transition: 'color 0.3s ease',
-                    },
-                    '& .MuiListItemText-primary': {
-                      fontWeight: 500,
-                      transition: 'all 0.3s ease',
-                    },
-                    '&.active': {
-                      backgroundColor: '#1976d2',
-                      color: 'white',
-                      '&:hover': {
-                        backgroundColor: '#1565c0',
-                      },
-                      '& .MuiListItemIcon-root': {
-                        color: 'white',
-                      },
-                      '& .MuiListItemText-primary': {
-                        fontWeight: 600,
-                        color: 'white',
-                      },
-                    },
-                  }}
+                  sx={listItemSx}
                 >
-                  <ListItemIcon sx={{ minWidth: 40 }}>
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary={item.text} 
-                    sx={{
-                      '& .MuiListItemText-primary': {
-                        fontSize: '0.9rem',
-                      }
-                    }}
+                  <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
+                  <ListItemText
+                    primary={item.text}
+                    sx={{ '& .MuiListItemText-primary': { fontSize: '0.9rem' } }}
                   />
                 </ListItem>
               ))}
               <Divider sx={{ my: 1, mx: 2, opacity: 0.3 }} />
             </Box>
           ))}
-          
         </List>
+        {/* Account pinned at bottom, modern pattern (Linear, Notion, Slack) */}
+        <Box
+          sx={{
+            borderTop: '1px solid',
+            borderColor: 'divider',
+            py: 1,
+            px: 0,
+            backgroundColor: 'rgba(0,0,0,0.02)',
+            overflowX: 'hidden',
+            flexShrink: 0,
+          }}
+        >
+          <ListItem
+            component={NavLink}
+            to={accountNavItem.path}
+            onClick={isMobile ? handleToggle : undefined}
+            sx={listItemSx}
+          >
+            <ListItemIcon sx={{ minWidth: 40 }}>{accountNavItem.icon}</ListItemIcon>
+            <ListItemText
+              primary={accountNavItem.text}
+              sx={{ '& .MuiListItemText-primary': { fontSize: '0.9rem' } }}
+            />
+          </ListItem>
+        </Box>
       </Drawer>
     </>
   );

@@ -11,3 +11,8 @@ export const getToken = () => {
 export const clearToken = () => {
     localStorage.removeItem('authToken');
 };
+
+export const logout = () => {
+    clearToken();
+    window.location.href = '/console';
+};
