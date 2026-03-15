@@ -57,7 +57,7 @@ export async function changePassword(req, res) {
     if (!user) return res.status(404).json({ success: false, error: 'User not found' });
     const valid = await user.comparePassword(currentPassword);
     if (!valid) {
-      return res.status(401).json({ success: false, error: 'Current password is incorrect' });
+      return res.status(400).json({ success: false, error: 'Current password is incorrect' });
     }
     user.password = newPassword;
     await user.save();

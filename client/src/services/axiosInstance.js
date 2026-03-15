@@ -22,10 +22,9 @@ axiosInstance.interceptors.request.use(
     }
 );
 
-// Paths that may return 401 for business logic (e.g. wrong password), not session invalid. Do not logout/redirect on 401 for these.
+// Paths that may return 401 for business logic (e.g. wrong credentials), not session invalid. Do not logout/redirect on 401 for these.
 const EXEMPT_401_LOGOUT_PATHS = [
     '/api/auth',
-    '/api/users/me/change-password',
 ];
 
 axiosInstance.interceptors.response.use(
