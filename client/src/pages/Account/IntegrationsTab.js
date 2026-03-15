@@ -130,7 +130,7 @@ const IntegrationsTab = () => {
   const handleVerifyAndSave = async () => {
     setError('');
     setSuccess('');
-    if (needsApiKey && !form.apiKey.trim()) {
+    if (needsApiKey && !form.apiKey.trim() && !integration?.hasApiKey) {
       setError('API key is required for this provider.');
       return;
     }
@@ -184,7 +184,7 @@ const IntegrationsTab = () => {
     }
   };
 
-  if (loading || !modelsConfig) {
+  if (loading) {
     return (
       <Box
         sx={{
